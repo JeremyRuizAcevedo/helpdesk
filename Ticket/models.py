@@ -28,7 +28,7 @@ class Action(models.Model):
     date = models.DateTimeField(auto_now=True)
     description = models.TextField()
     ticket = models.ForeignKey(Ticket)
-    is_solution = models.BooleanField(defautl=False)
+    is_solution = models.BooleanField(default=False)
     
     def __str__(self):
         return self.description
