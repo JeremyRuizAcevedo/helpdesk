@@ -16,8 +16,8 @@ class Ticket(models.Model):
     description = models.TextField()
     date = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False)
-    solution = models.TextField()
-    employee = models.ForeignKey(Employee)
+    solution = models.TextField(null=True, blank=True)
+    employee = models.ForeignKey(Employee,null=True, blank=True)
     service_type = models.ForeignKey(ServiceType)
     
     def __str__(self):
@@ -27,7 +27,7 @@ class Ticket(models.Model):
 class Action(models.Model):
     date = models.DateTimeField(auto_now=True)
     description = models.TextField()
-    ticket = models.ForeignKey(Ticket)
+    ticket = models.ForeignKey(Ticket, null=True, blank=True)
     is_solution = models.BooleanField(default=False)
     
     def __str__(self):
