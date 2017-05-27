@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^poll/', include('Poll.urls')),
     url(r'^service/', include('Service.urls')),
     url(r'^ticket/', include('Ticket.urls')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

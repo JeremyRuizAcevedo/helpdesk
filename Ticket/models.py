@@ -24,7 +24,7 @@ class Ticket(models.Model):
         return self.number + self.subject
 
 
-class Action(models.Model):
+class Activity(models.Model):
     date = models.DateTimeField(auto_now=True)
     description = models.TextField()
     ticket = models.ForeignKey(Ticket, null=True, blank=True)

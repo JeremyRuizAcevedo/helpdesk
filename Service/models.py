@@ -9,9 +9,14 @@ class Category(models.Model):
         return self.name
 
 
+class ServicePriority(models.Model):
+    name = models.CharField(max_length=15, default='Baja')
+    description = models.TextField(blank=True, null=True)
+
+
 class Service(models.Model):
     name = models.CharField(max_length=50)
-    prioridad = models.IntegerField()
+    prioridad = models.ForeignKey(ServicePriority)
     ans = models.IntegerField()
     notification = models.BooleanField()
     notification_boss = models.BooleanField()

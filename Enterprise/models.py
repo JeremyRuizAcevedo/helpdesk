@@ -12,7 +12,7 @@ class Area(models.Model):
 
 
 class Employee(models.Model):
-    user = models.OneToOneField(User, blank=True, null=True)
+    user = models.OneToOneField(User, blank=True, null=True, on_delete=models.CASCADE)
     code = models.IntegerField()
     dni = models.IntegerField()
     phone = models.IntegerField(blank=True, null=True)
@@ -23,8 +23,8 @@ class Employee(models.Model):
 
 
 class Technical(models.Model):
-    employee = models.OneToOneField(Employee)
-    boss = models.OneToOneField(Employee, related_name="boss")
+    employee = models.OneToOneField(Employee, on_delete=models.CASCADE)
+    boss = models.ForeignKey(Employee, related_name="boss")
     status = models.BooleanField()
     services = models.ManyToManyField(Service)
     
