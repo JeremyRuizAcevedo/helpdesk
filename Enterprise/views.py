@@ -15,6 +15,15 @@ from Enterprise.serializers import EmployeeSerializer, TechnicalSerializer,\
 from Enterprise.models import Employee, Technical, Area
 # Create your views here.
 
+class MyHTMLRenderer(TemplateHTMLRenderer):
+    def get_template_context(self, data, renderer_context):
+        context = {'data': data}
+        response = renderer_context['response']
+        if response.exception:
+            data['status_code'] = response.status_code
+        return context
+
+
 class Login(APIView):
     permission_classes = [AllowAny]
     renderer_classes = [TemplateHTMLRenderer]

@@ -46,7 +46,7 @@
 			</a>
 			</span>
 
-			<a class="navbar-brand" href="index.html">Avenxo</a>
+			<a class="" href="{% url 'Enterprise:dashboard' %}" style="font-size: 150%; color: white">MESA DE AYUDA</a>
 
 			<div class="toolbar-icon-bg hidden-xs" id="toolbar-search">
 				<div class="input-group">
@@ -277,7 +277,7 @@
 									</div>
 									<div class="info">
 										<span class="username">Jonathan Smith</span>
-										<span class="useremail">jon@avenxo.com</span>
+										<span class="useremail">jon@helpdesk.com</span>
 									</div>
 								</div>
 							</div>
@@ -297,7 +297,7 @@
 									<li>
 										<a href="javascript:;"><i class="ti ti-settings"></i><span>Servicios</span></a>
 										<ul class="acc-menu">
-											<li><a href="ui-panels.html">Crear Servicio</a></li>
+											<li><a href="{% url 'Service:list-service' %}">Crear Servicio</a></li>
 											<li><a href="ui-advancedpanels.html">Listado de Servicios</a></li>
 										</ul>
 									</li>
