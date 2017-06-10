@@ -11,6 +11,8 @@ from rest_framework.response import Response
 from Enterprise.views import MyHTMLRenderer
 
 # Create your views here.
+
+
 class ServiceAPI(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]

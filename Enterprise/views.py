@@ -15,6 +15,7 @@ from Enterprise.serializers import EmployeeSerializer, TechnicalSerializer,\
 from Enterprise.models import Employee, Technical, Area
 # Create your views here.
 
+
 class MyHTMLRenderer(TemplateHTMLRenderer):
     def get_template_context(self, data, renderer_context):
         context = {'data': data}
@@ -40,7 +41,7 @@ class Login(APIView):
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.username == 'jeremy':
-                login( request, user)
+                login(request, user)
         else:
             self.message = "Username o password incorrectos"
         return redirect("Enterprise:dashboard")
@@ -62,7 +63,8 @@ class Register(APIView):
             print('Usuario ya registrado')
         else:
             print('registrar')
-        return render(request, self.template, self.get_context() )
+        return render(request, self.template, self.get_context())
+
 
 class Dashbboard(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]

@@ -28,11 +28,11 @@
 												</div>
 											</div>
 											<div class="form-group">
-												<label for="selector1" class="col-sm-2 control-label">Prioridad</label>
+												<label class="col-sm-2 control-label">Prioridad</label>
 												<div class="col-sm-8">
-													<select name="priority" id="selector1" class="form-control">
+													<select name="priority" class="form-control">
 														{% for priority in data.prioritys %}
-															<option>{{ priority.name }}</option>
+															<option value="{{ priority.id }}">{{ priority.name }}</option>
 														{% endfor %}
 													</select>
 												</div>
@@ -40,15 +40,15 @@
 											<div class="form-group">
 												<label for="focusedinput" class="col-sm-2 control-label">ANS</label>
 												<div class="col-sm-8">
-													<input type="time" class="form-control" id="focusedinput" name='ans' placeholder="Ingrese el ANS">
+													<input type="number" class="form-control" id="focusedinput" name='ans' placeholder="Ingrese el ANS">
 												</div>
 											</div>
 											<div class="form-group">
-												<label for="selector2" class="col-sm-2 control-label">Categoria</label>
+												<label class="col-sm-2 control-label">Categoria</label>
 												<div class="col-sm-8">
-													<select name="category" id="selector2" class="form-control">
+													<select name="category" class="form-control">
 														{% for category in data.categorys %}
-															<option>{{ category.name }}</option>
+															<option value="{{ category.id }}">{{ category.name }}</option>
 														{% endfor %}
 													</select>
 												</div>

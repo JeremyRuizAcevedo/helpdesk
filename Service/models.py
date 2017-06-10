@@ -2,6 +2,8 @@
 from django.db import models
 
 # Create your models here.
+
+
 class Category(models.Model):
     """ Category model """
     name = models.CharField(max_length=50)
@@ -23,8 +25,8 @@ class Service(models.Model):
     name = models.CharField(max_length=50)
     priority = models.ForeignKey(ServicePriority)
     ans = models.IntegerField()
-    notification = models.BooleanField()
-    notification_boss = models.BooleanField()
+    notification = models.BooleanField(default=False)
+    notification_boss = models.BooleanField(default=False)
     category = models.ForeignKey(Category)
 
     def __str__(self):
