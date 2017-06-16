@@ -26,6 +26,7 @@ class CategoryAPI(ModelViewSet):
         if 'create' in request.query_params:
             return Response({}, template_name = 'Service/create-category.html')
         else:
+            print(request.method)
             return ModelViewSet.list(self, request, *args, **kwargs)
 
 

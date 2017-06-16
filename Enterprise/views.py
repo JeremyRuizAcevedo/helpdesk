@@ -18,11 +18,31 @@ from Enterprise.models import Employee, Technical, Area
 
 class MyHTMLRenderer(TemplateHTMLRenderer):
     def get_template_context(self, data, renderer_context):
+
+        """
+        Override of TemplateHTMLRenderer class method to display
+        extra context in the template, which is otherwise omitted.
+        """
+        temp = data
         context = {'data': data}
         response = renderer_context['response']
         if response.exception:
+            context = {'data':data}
             data['status_code'] = response.status_code
-        return context
+            return context
+        else:
+            print('aqui')
+            context = temp
+    
+            # pop keys which we do not need in the template
+            keys_to_delete = ['request', 'response', 'args', 'kwargs']
+            for item in keys_to_delete:
+                renderer_context.pop(item)
+    
+            for key, value in renderer_context.items():
+                if key not in context:
+                    context[key] = value
+            return context
 
 
 class Login(APIView):
