@@ -18,16 +18,26 @@ class CategoryAPI(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    renderer_classes = [MyHTMLRenderer]
-    template_name = 'Service/list-categorys.html'
-    lookup_field = 'id'
+    renderer_classes = [TemplateHTMLRenderer]
+    lookup_field = 'pk'
 
     def list(self, request, *args, **kwargs):
-        if 'create' in request.query_params:
-            return Response({}, template_name = 'Service/create-category.html')
-        else:
-            print(request.method)
-            return ModelViewSet.list(self, request, *args, **kwargs)
+        response = super(CategoryAPI, self).list(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            if 'create' in request.query_params:
+                return Response({}, template_name = 'Service/create-category.html')
+            else:
+                return Response({'data': response.data},
+                                template_name = 'Service/list-categorys.html')
+        return response
+
+    def retrieve(self, request, *args, **kwargs):
+        response = super(CategoryAPI, self).retrieve(request, *args, **kwargs)
+        print(response.data)
+        if request.accepted_renderer.format == 'html':
+            return Response({'data': response.data},
+                            template_name = 'Service/edit-category.html')
+        return response
 
 
 class ServiceAPI(ModelViewSet):

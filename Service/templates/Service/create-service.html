@@ -31,7 +31,7 @@
 												<label class="col-sm-2 control-label">Prioridad</label>
 												<div class="col-sm-8">
 													<select name="priority" class="form-control">
-														{% for priority in data.prioritys %}
+														{% for priority in prioritys %}
 															<option value="{{ priority.id }}">{{ priority.name }}</option>
 														{% endfor %}
 													</select>
@@ -47,7 +47,7 @@
 												<label class="col-sm-2 control-label">Categoria</label>
 												<div class="col-sm-8">
 													<select name="category" class="form-control">
-														{% for category in data.categorys %}
+														{% for category in categorys %}
 															<option value="{{ category.id }}">{{ category.name }}</option>
 														{% endfor %}
 													</select>
