@@ -287,10 +287,24 @@
 								<ul class="acc-menu">
 									<li class="nav-separator"><span>Explore</span></li>
 									<li><a href="{% url 'Enterprise:dashboard' %}"><i class="ti ti-home"></i><span>Dashboard</span><span class="badge badge-teal">2</span></a></li>
-									<li><a href="javascript:;"><i class="ti ti-layout"></i><span>Ticket</span></a>
+									<li>
+										<a href="javascript:;"><i class="fa fa-building-o"></i><span>Áreas</span></a>
 										<ul class="acc-menu">
-											<li><a href="layout-grids.html">Crear Ticket</a></li>
-											<li><a href="layout-static-leftbar.html">Listado de Tickets</a></li>
+											<li><a href="{% url 'Enterprise:area-list' %}?create=''">Crear Área</a></li>
+											<li><a href="{% url 'Enterprise:area-list' %}">Listado de Áreas</a></li>
+										</ul>
+									</li>
+									<li>
+										<a href="javascript:;"><i class="fa fa-users"></i><span>Empleados</span></a>
+										<ul class="acc-menu">
+											<li><a href="{% url 'Enterprise:employee-list' %}?create=''">Nuevo Empleado</a></li>
+											<li><a href="{% url 'Enterprise:employee-list' %}">Listado de Empleados</a></li>
+										</ul>
+									</li>
+									<li><a href="javascript:;"><i class="ti ti-ticket"></i><span>Ticket</span></a>
+										<ul class="acc-menu">
+											<li><a href="{% url 'Ticket:ticket-list' %}?create=''">Crear Ticket</a></li>
+											<li><a href="{% url 'Ticket:ticket-list' %}">Listado de Tickets</a></li>
 										</ul>
 									</li>
 									<li><a href="index.html"><i class="ti ti-view-list-alt"></i><span>Base de Conocimiento</span><span class="badge badge-teal">2</span></a></li>

@@ -1,0 +1,96 @@
+{% extends 'Enterprise/base.html' %} {% block title %} Nuevo Empleado {% endblock %} {% block content %}
+<div class="static-content">
+  <div class="page-content">
+    <ol class="breadcrumb">
+
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">UI Elements</a></li>
+      <li class="active"><a href="ui-forms.html">Forms</a></li>
+
+    </ol>
+    <div class="container-fluid">
+
+      <div data-widget-group="group1">
+        <div class="row">
+          <div class="col-sm-12">
+
+            <div class="panel panel-midnightblue" data-widget='{"draggable": "false"}'>
+              <div class="panel-heading">
+                <h2>Nuevo Empleado</h2>
+                <!-- <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body, .panel-footer"}'></div> -->
+              </div>
+              <div class="panel-body">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="horizontal-form">
+                    <form class="form-horizontal">
+                      <div class="form-group">
+                        <label for="focusedinput" class="col-sm-2 control-label">DNI</label>
+                        <div class="col-sm-8">
+                          <input type="number" class="form-control" id="focusedinput" placeholder="Ingrese su DNI" maxlength="10" onkeypress="return valida(event)">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="focusedinput" class="col-sm-2 control-label">Nombres</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" id="focusedinput" maxlength="9" minlength="7" onkeypress="return valida(event)">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="focusedinput" class="col-sm-2 control-label">Apellidos</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" id="focusedinput" maxlength="9" minlength="7" onkeypress="return valida(event)">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="focusedinput" class="col-sm-2 control-label">Teléfono</label>
+                        <div class="col-sm-8">
+                          <input type="number" class="form-control" id="focusedinput" maxlength="9" minlength="7" onkeypress="return valida(event)">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Área</label>
+                        <div class="col-sm-8">
+                          <select name="area" class="form-control">
+														{% for area in areas %}
+															<option value="{{ area.id }}">{{ area.name }}</option>
+														{% endfor %}
+													</select>
+                        </div>
+                      </div>
+                      <script>
+                        function valida(e) {
+                          tecla = (document.all) ? e.keyCode : e.which;
+
+                          //Tecla de retroceso para borrar, siempre la permite
+                          if (tecla == 8) {
+                            return true;
+                          }
+
+                          // Patron de entrada, en este caso solo acepta numeros
+                          patron = /[0-9]/;
+                          tecla_final = String.fromCharCode(tecla);
+                          return patron.test(tecla_final);
+                        }
+                      </script>
+                      <div class="panel-footer">
+                        <div class="row">
+                          <div class="col-sm-8 col-sm-offset-2">
+                            <input type="submit" class="btn btn-primary pull-right" value="Crear">
+                            <button class="btn-default btn">Cancel</button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- .container-fluid -->
+  </div>
+  <!-- #page-content -->
+</div>
+{% endblock %}

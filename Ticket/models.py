@@ -1,5 +1,5 @@
 from django.db import models
-from Enterprise.models import Employee
+from Enterprise.models import Employee, Technical
 
 # Create your models here.
 class ServiceType(models.Model):
@@ -16,12 +16,13 @@ class Ticket(models.Model):
     description = models.TextField()
     date = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False)
-    solution = models.TextField(null=True, blank=True)
+    solution = models.TextField(default="")
     employee = models.ForeignKey(Employee,null=True, blank=True)
+    service = models.ForeignKey(Technical, null=True, blank=True)
     service_type = models.ForeignKey(ServiceType)
     
     def __str__(self):
-        return self.number + self.subject
+        return str(self.number) + self.subject
 
 
 class Activity(models.Model):

@@ -4,7 +4,7 @@
     <ol class="breadcrumb">
       <li><a href="{% url 'Enterprise:dashboard' %}">Dashboard</a></li>
       <li><a href="{% url 'Service:category-list' %}">Categorías</a></li>
-      <li class="active"><a href="{% url 'Service:category-detail id=category.id' %}">Editar categoría</a></li>
+      <li class="active"><a href="">Editar categoría</a></li>
     </ol>
     <div class="container-fluid">
 
@@ -24,13 +24,13 @@
                       <div class="form-group">
                         <label for="focusedinput" class="col-sm-2 control-label">Nombre</label>
                         <div class="col-sm-8">
-                          <input type="text" class="form-control" id="focusedinput" name='name'>
+                          <input type="text" class="form-control" id="focusedinput" name='name' value="{{category.name}}">
                         </div>
                       </div>
                       <br>
                       <div class="form-group">
                         <label for="txtarea1" class="col-sm-2 control-label">Descripción</label>
-                        <div class="col-sm-8"><textarea name="description" id="txtarea1" cols="50" rows="4" class="form-control"></textarea></div>
+                        <div class="col-sm-8"><textarea name="description" id="txtarea1" cols="50" rows="4" class="form-control">{{category.description}}</textarea></div>
                       </div>
                       <div class="panel-footer">
                         <div class="row">
@@ -53,18 +53,16 @@
 </div>
 {% endblock %} {% block js %}
 <script>
-  $(document).ready(function () {
     $(".update").click(function () {
       console.log('hola');
       $.ajax({
-        url: 'service/categorys/2',
+        url: '',
         type: 'PUT',
-        data: "",
+        data: "{'name':'nose', 'description':'hol'}",
         success: function (data) {
           alert('Load was performed.');
         }
       });
     });
-  });
 </script>
 {% endblock %}

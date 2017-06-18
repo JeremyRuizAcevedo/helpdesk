@@ -13,6 +13,7 @@ from rest_framework.viewsets import ModelViewSet
 from Enterprise.serializers import EmployeeSerializer, TechnicalSerializer,\
     AreaSerializer
 from Enterprise.models import Employee, Technical, Area
+from rest_framework.urls import template_name
 # Create your views here.
 
 
@@ -107,15 +108,55 @@ class AreaAPI(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = AreaSerializer
     queryset = Area.objects.all()
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'Enterprise/list-areas.html'
     lookup_field = 'id'
 
+    def list(self, request, *args, **kwargs):
+        response = super(AreaAPI, self).list(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            if 'create' in request.query_params:
+                return Response({}, template_name = 'Enterprise/create-area.html')
+            else:
+                return render({'areas': response.data},
+                                template_name = 'Enterprise/list-areas.html')
+        return response
+    
+    def retrieve(self, request, *args, **kwargs):
+        response = super(AreaAPI, self).retrieve(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            return Response({'area': response.data},
+                            template_name = 'Service/edit-area.html')
+        return response
 
 class EmployeeAPI(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = EmployeeSerializer
     queryset = Employee.objects.all()
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'Enterprise/list-employees.html'
     lookup_field = 'id'
+    
+    def list(self, request, *args, **kwargs):
+        response = super(EmployeeAPI, self).list(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            if 'create' in request.query_params:
+                areas = Area.objects.all()
+                area = AreaSerializer(areas, many=True)
+                return Response({'areas': area.data},
+                                template_name = 'Enterprise/create-employee.html')
+            else:
+                return render({'employees': response.data},
+                                template_name = 'Enterprise/list-employees.html')
+        return response
+    
+    def retrieve(self, request, *args, **kwargs):
+        response = super(EmployeeAPI, self).retrieve(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            return Response({'employee': response.data},
+                            template_name = 'Service/edit-employee.html')
+        return response
 
 
 class TechnicalAPI(ModelViewSet):

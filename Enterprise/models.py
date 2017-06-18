@@ -1,6 +1,7 @@
 from django.db import models
 from Service.models import Service
 from django.contrib.auth.models import User
+from random import randrange
 
 # Create your models here.
 class Area(models.Model):
@@ -13,7 +14,7 @@ class Area(models.Model):
 
 class Employee(models.Model):
     user = models.OneToOneField(User, blank=True, null=True, on_delete=models.CASCADE)
-    code = models.IntegerField()
+    code = models.IntegerField(default=randrange(13200000, 13201999, 43))
     dni = models.IntegerField()
     phone = models.IntegerField(blank=True, null=True)
     area = models.ForeignKey(Area)

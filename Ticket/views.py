@@ -1,3 +1,41 @@
 from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import authentication_classes,\
+    permission_classes, renderer_classes
+from rest_framework.authentication import SessionAuthentication,\
+    BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from Ticket.models import Ticket, ServiceType
+from Ticket.serializers import TicketSerializer, ServiceTypeSerializer
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.urls import template_name
+from rest_framework.response import Response
+from Enterprise.models import Technical
+from Enterprise.serializers import TechnicalSerializer
 
 # Create your views here.
+class TicketAPI(ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = TicketSerializer
+    queryset = Ticket.objects.all()
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'Ticket/list-tickets.html'
+    lookup_field = 'id'
+    
+    def list(self, request, *args, **kwargs):
+        response = super(TicketAPI, self).list(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            if 'create' in request.query_params:
+                services_types = ServiceType.objects.all()
+                services_type = ServiceTypeSerializer(services_types, many=True)
+                technicals = Technical.objects.all()
+                technical = TechnicalSerializer(technicals, many=True)
+                return Response({'service_types': services_type.data,
+                                 'technicals': technical.data},
+                                template_name = 'Ticket/create-ticket.html')
+            else:
+                return render({'tickets': response.data},
+                                template_name = 'Enterprise/list-tickets.html')
+        return response
+    

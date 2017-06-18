@@ -11,6 +11,6 @@ urlpatterns = [
         views.ServiceAPI.as_view({'get': 'retrieve', 'put': 'update'}), name='service-detail'),
     url(r'^categorys/$',
         views.CategoryAPI.as_view({'get': 'list', 'post': 'create'}), name='category-list'),
-    url(r'^categorys/(?P<pk>[0-9]+)/$',
+    url(r'^categorys/(?P<id>[0-9]+)/$',
         views.CategoryAPI.as_view({'get': 'retrieve', 'put': 'update'}), name='category-detail'),
 ]
