@@ -1,4 +1,11 @@
 {% extends 'Enterprise/base.html' %} {% block title %} Lista de Servicios {% endblock %} {% block content %}
+<style>
+	table,
+	th,
+	td {
+		text-align: center;
+	}
+</style>
 <div class="static-content">
 	<div class="page-content">
 		<ol class="breadcrumb">
@@ -18,7 +25,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="panel panel-default">
-							<div class="panel-heading">
+							<div class="panel-heading" style="background-color: #37474f">
 								<h2>TABLA DE DATOS</h2>
 								<div class="panel-ctrls"></div>
 							</div>
@@ -27,30 +34,28 @@
 									<thead>
 										<tr>
 											<th>Servicio</th>
+											<th>Categoría</th>
 											<th>Prioridad</th>
 											<th>ANS</th>
-											<th>Categoría</th>
+											<th>Editar</th>
+											<th>Eliminar</th>
 										</tr>
 									</thead>
 									<tbody>
+										{% for service in data %}
+
 										<tr class="odd gradeX">
-											<td>Trident</td>
-											<td>Internet Explorer 4.0</td>
-											<td>Win 95+</td>
-											<td class="center"> 4</td>
+											<td style="text-align: left">{{service.name}}
+											</td>
+											<td style="width:20%">{{service.category.name}}</td>
+											<td style="width:10%">{{service.priority.name}}</td>
+											<td style="width:10%">{{service.ans}}</td>
+											<td style="width:10%"><a href="{% url 'Service:service-detail' id=service.id %}"><i class="ti ti-pencil"></i></a></td>
+											<td style="width:10%"><a href="#"><i class="ti ti-trash"></i></a></td>
 										</tr>
-										<tr class="odd gradeX">
-											<td>Trident</td>
-											<td>Internet Explorer 4.0</td>
-											<td>Win 95+</td>
-											<td class="center"> 4</td>
-										</tr>
-										<tr class="odd gradeX">
-											<td>Trident</td>
-											<td>Internet Explorer 4.0</td>
-											<td>Win 95+</td>
-											<td class="center"> 4</td>
-										</tr>
+
+										{% endfor %}
+									</tbody>
 									</tbody>
 								</table>
 							</div>

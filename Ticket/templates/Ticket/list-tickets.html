@@ -1,0 +1,94 @@
+{% extends 'Enterprise/base.html' %} {% block title %} Lista de Tickets {% endblock %} {% block content %}
+<style>
+	table,
+	th,
+	td {
+		text-align: center;
+	}
+</style>
+<div class="static-content">
+  <div class="page-content">
+
+    <div class="container-fluid">
+
+      <div data-widget-group="group1">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+
+              <label for="desde" class="col-sm-1 control-label">Desde</label>
+              <div class="col-sm-2">
+                <input type="date" class="form-control" id="desde">
+              </div>
+              <label for="hasta" class="col-sm-1 control-label">Hasta</label>
+              <div class="col-sm-2">
+                <input type="date" class="form-control" id="hasta">
+              </div>
+              <div class="col-sm-2">
+              </div>
+              <div class="form-group">
+                <label for="selector1" class="col-sm-1 control-label">Estado</label>
+                <div class="col-sm-3"><select name="selector1" id="selector1" class="form-control">
+							<option>Sin Atender</option>
+							<option>Atendidos</option>
+							<option>Todos</option>
+					</select></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel panel-midnightblue">
+              <div class="panel-heading">
+                <h2>Consultar Tickets</h2>
+              </div>
+              <div class="panel-body">
+
+                <table class="table m-n">
+                  <thead>
+                    <tr>
+                      <th>Número Ticket</th>
+                      <th>Solicitante</th>
+                      <th>Fecha de Registro</th>
+                      <th>Tipo de Problema</th>
+                      <th>Asunto</th>
+                      <th>Estado</th>
+											<th>Editar</th>
+											<th>Eliminar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for ticket in tickets %}
+                    <tr class="odd gradeX">
+                      <td>{{ticket.number}}</td>
+                      <td>{{ticket.employee.user.first_name}} {{ticket.employee.user.last_name}}</td>
+                      <td>{{ticket.date}}</td>
+                      <td>{{ticket.service_type.name}}</td>
+                      <td>{{ticket.subject}}</td>
+                      {% if ticket.status %}
+                      <td bgcolor="#B0E8AD" font="white">ATENDIDO</td>
+                      {% else %}
+                      <td bgcolor="#FF6161" font="white">SIN ATENDER</td>
+                      {% endif %}
+                      <td style="width:10%"><a href="{% url 'Ticket:ticket-detail' id=ticket.id %}"><i class="ti ti-pencil"></i></a></td>
+                      <td style="width:10%"><a href="#"><i class="ti ti-trash"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <!-- .container-fluid -->
+</div>
+{% endblock %}

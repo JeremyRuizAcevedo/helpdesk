@@ -17,33 +17,33 @@ from rest_framework.urls import template_name
 # Create your views here.
 
 
-class MyHTMLRenderer(TemplateHTMLRenderer):
-    def get_template_context(self, data, renderer_context):
-
-        """
-        Override of TemplateHTMLRenderer class method to display
-        extra context in the template, which is otherwise omitted.
-        """
-        temp = data
-        context = {'data': data}
-        response = renderer_context['response']
-        if response.exception:
-            context = {'data':data}
-            data['status_code'] = response.status_code
-            return context
-        else:
-            print('aqui')
-            context = temp
-    
-            # pop keys which we do not need in the template
-            keys_to_delete = ['request', 'response', 'args', 'kwargs']
-            for item in keys_to_delete:
-                renderer_context.pop(item)
-    
-            for key, value in renderer_context.items():
-                if key not in context:
-                    context[key] = value
-            return context
+# class MyHTMLRenderer(TemplateHTMLRenderer):
+#     def get_template_context(self, data, renderer_context):
+# 
+#         """
+#         Override of TemplateHTMLRenderer class method to display
+#         extra context in the template, which is otherwise omitted.
+#         """
+#         temp = data
+#         context = {'data': data}
+#         response = renderer_context['response']
+#         if response.exception:
+#             context = {'data':data}
+#             data['status_code'] = response.status_code
+#             return context
+#         else:
+#             print('aqui')
+#             context = temp
+#     
+#             # pop keys which we do not need in the template
+#             keys_to_delete = ['request', 'response', 'args', 'kwargs']
+#             for item in keys_to_delete:
+#                 renderer_context.pop(item)
+#     
+#             for key, value in renderer_context.items():
+#                 if key not in context:
+#                     context[key] = value
+#             return context
 
 
 class Login(APIView):
@@ -118,7 +118,7 @@ class AreaAPI(ModelViewSet):
             if 'create' in request.query_params:
                 return Response({}, template_name = 'Enterprise/create-area.html')
             else:
-                return render({'areas': response.data},
+                return Response({'areas': response.data},
                                 template_name = 'Enterprise/list-areas.html')
         return response
     
@@ -147,7 +147,7 @@ class EmployeeAPI(ModelViewSet):
                 return Response({'areas': area.data},
                                 template_name = 'Enterprise/create-employee.html')
             else:
-                return render({'employees': response.data},
+                return Response({'employees': response.data},
                                 template_name = 'Enterprise/list-employees.html')
         return response
     

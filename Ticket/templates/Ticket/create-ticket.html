@@ -1,33 +1,25 @@
-{% extends 'Enterprise/base.html' %} {% block title %} Nuevo Ticket {% endblock %} {% block content %}
+ {% extends 'Enterprise/base.html' %} {% block title %} Nuevo Ticket {% endblock %} {% block content %}
 <div class="static-content">
 	<div class="page-content">
 		<ol class="breadcrumb">
-			<li><a href="{% url 'Enterprise:dashboard' %}">Dashboard</a></li>
-			<li><a href="{% url 'Service:service-list' %}">Servicios</a></li>
-			<li class="active"><a href="{% url 'Service:service-list' %}?create=''">Nuevo Servicio</a></li>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="#">Tickets</a></li>
+			<li class="active"><a href="ui-forms.html">Nuevo Ticket</a></li>
 		</ol>
 		<div class="container-fluid">
-
 			<div data-widget-group="group1">
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="panel panel-midnightblue" data-widget='{"draggable": "false"}'>
 							<div class="panel-heading">
-								<h2>Crear Ticket</h2>
+								<h2>Registro de Tickets</h2>
 							</div>
 							<div class="panel-body">
 								<div class="tab-content">
 									<div class="tab-pane active" id="horizontal-form">
-										<form class="form-horizontal" method="post">
-											{% csrf_token %}
+										<form class="form-horizontal">
 											<div class="form-group">
-												<label for="disabledinput" class="col-sm-2 control-label">N° de Ticket</label>
-												<div class="col-sm-8">
-													<input disabled type="text" class="form-control" id="disabledinput" placeholder="001-TA">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-2 control-label">Tipo de Servicio</label>
+												<label class="col-sm-2 control-label">Tipo de Ticket</label>
 												<div class="col-sm-8">
 													<select name="service_type" class="form-control">
 														{% for service_type in service_types %}
@@ -37,36 +29,86 @@
 												</div>
 											</div>
 											<div class="form-group">
-												<label for="selector1" class="col-sm-2 control-label">Empleado</label>
+												<label class="col-sm-2 control-label">Categoria</label>
 												<div class="col-sm-8">
-													<select name="priority" class="form-control">
-													
-															<option>TC1</option>
-														    <option>TC2</option>
-														    <option>TC3</option>
-														    <option>TC4</option>
+													<select name="category" class="form-control" id="category">
+														{% for category in categorys %}
+															<option value="{{ category.id }}">{{ category.name }}</option>
+														{% endfor %}
 													</select>
 												</div>
 											</div>
 											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Asunto</label>
+												<label for="selector1" class="col-sm-2 control-label">Servicio :</label>
+												<div class="col-sm-8">
+													<select name="service" class="form-control" id="service">
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="focusedinput" class="col-sm-2 control-label">Asunto(*) :</label>
 												<div class="col-sm-8">
 													<input type="text" class="form-control" id="focusedinput">
 												</div>
 											</div>
 											<div class="form-group">
-												<label for="txtarea1" class="col-sm-2 control-label">Descripción</label>
-												<div class="col-sm-8"><textarea name="txtarea1" id="txtarea1" cols="50" rows="4" class="form-control"></textarea></div>
+												<label for="txtarea1" class="col-sm-2 control-label">Descripción(*)</label>
+												<div class="col-sm-8"><textarea name="description" id="txtarea1" cols="50" rows="4" class="form-control"></textarea></div>
+											</div>
+											<div class="form-group">
+												<label for="selector1" class="col-sm-2 control-label">Prioridad :</label>
+												<div class="col-sm-6">
+													<select name="priority" class="form-control">
+															<option>-----</option>
+															<option>Alta</option>
+														    <option>Media</option>
+														    <option>Baja</option>
+													</select>
+												</div>
+											</div>
+											<div class="panel-footer">
+												<div class="row">
+													<div class="col-sm-8 col-sm-offset-2">
+														<input type="submit" class="btn btn-primary pull-right" value="Crear">
+														<button class="btn-default btn">Cancel</button>
+													</div>
+												</div>
 											</div>
 										</form>
 									</div>
 								</div>
 							</div>
+							<!-- .container-fluid -->
 						</div>
+						<!-- #page-content -->
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+{% endblock %} {% block js %}
+<script type="text/javascript" src="assets/plugins/summernote/dist/summernote.js"></script>
+<script>
+	$(document).ready(function () {
+		$('.summernote').summernote({
+			height: 200
+		});
+		$('.airmode').summernote({
+			airMode: true
+		});
+	});
+
+	$("#category").change(function () {
+		var id_category = $("#category").val();
+		$.get("/service/categorys/" + id_category + "/", function (data) {
+			var html = "";
+			for (var i = 0; i < data.services.length; i++) {
+				html += "<option value='" + data.services[i].id + "'>" + data.services[i].name + "</option>"
+			}
+			$("#service").html(html);
+		});
+	});
+
+</script>
 {% endblock %}

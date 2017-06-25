@@ -1,5 +1,6 @@
 from django.db import models
 from Enterprise.models import Employee, Technical
+from random import randrange
 
 # Create your models here.
 class ServiceType(models.Model):
@@ -11,7 +12,7 @@ class ServiceType(models.Model):
 
 
 class Ticket(models.Model):
-    number = models.IntegerField()
+    number = models.IntegerField(default=randrange(100, 999, 7))
     subject = models.CharField(max_length=50)
     description = models.TextField()
     date = models.DateTimeField(auto_now=True)
@@ -22,7 +23,7 @@ class Ticket(models.Model):
     service_type = models.ForeignKey(ServiceType)
     
     def __str__(self):
-        return str(self.number) + self.subject
+        return str(self.number) + " - " + self.subject
 
 
 class Activity(models.Model):

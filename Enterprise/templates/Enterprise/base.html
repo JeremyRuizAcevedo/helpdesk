@@ -35,7 +35,7 @@
 
 <body class="animated-content">
 
-	<header id="topnav" class="navbar navbar-default navbar-fixed-top" role="banner">
+	<header id="topnav" class="navbar navbar-default navbar-fixed-top" style="background-color: #37474f" role="banner">
 
 		<div class="logo-area">
 			<span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
@@ -307,24 +307,21 @@
 											<li><a href="{% url 'Ticket:ticket-list' %}">Listado de Tickets</a></li>
 										</ul>
 									</li>
-									<li><a href="index.html"><i class="ti ti-view-list-alt"></i><span>Base de Conocimiento</span><span class="badge badge-teal">2</span></a></li>
+									<li><a href="index.html"><i class="ti ti-server"></i><span>Base de Conocimiento</span><span class="badge badge-teal">2</span></a></li>
 									<li>
-										<a href="javascript:;"><i class="ti ti-settings"></i><span>Categorías</span></a>
+										<a href="javascript:;"><i class="ti ti-layout-accordion-merged"></i><span>Categorías</span></a>
 										<ul class="acc-menu">
 											<li><a href="{% url 'Service:category-list' %}?create=''">Crear Categoría</a></li>
 											<li><a href="{% url 'Service:category-list' %}">Listado de Categorías</a></li>
 										</ul>
 									</li>
 									<li>
-										<a href="javascript:;"><i class="ti ti-settings"></i><span>Servicios</span></a>
+										<a href="javascript:;"><i class="ti ti-layout-accordion-list"></i><span>Servicios</span></a>
 										<ul class="acc-menu">
 											<li><a href="{% url 'Service:service-list' %}?create=''">Crear Servicio</a></li>
 											<li><a href="{% url 'Service:service-list' %}">Listado de Servicios</a></li>
 										</ul>
 									</li>
-									<li class="nav-separator"><span>Extras</span></li>
-									<li><a href="app-inbox.html"><i class="ti ti-email"></i><span>Inbox</span><span class="badge badge-danger">3</span></a></li>
-									<li><a href="extras-calendar.html"><i class="ti ti-calendar	"></i><span>Calendar</span><span class="badge badge-orange">1</span></a></li>
 								</ul>
 							</nav>
 						</div>

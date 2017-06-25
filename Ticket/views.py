@@ -12,6 +12,8 @@ from rest_framework.urls import template_name
 from rest_framework.response import Response
 from Enterprise.models import Technical
 from Enterprise.serializers import TechnicalSerializer
+from Service.models import Category
+from Service.serializers import CategorySerializer
 
 # Create your views here.
 class TicketAPI(ModelViewSet):
@@ -22,20 +24,20 @@ class TicketAPI(ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'Ticket/list-tickets.html'
     lookup_field = 'id'
-    
+
     def list(self, request, *args, **kwargs):
         response = super(TicketAPI, self).list(request, *args, **kwargs)
         if request.accepted_renderer.format == 'html':
             if 'create' in request.query_params:
                 services_types = ServiceType.objects.all()
                 services_type = ServiceTypeSerializer(services_types, many=True)
-                technicals = Technical.objects.all()
-                technical = TechnicalSerializer(technicals, many=True)
+                categorys = Category.objects.all()
+                category = CategorySerializer(categorys, many=True)
                 return Response({'service_types': services_type.data,
-                                 'technicals': technical.data},
+                                 'categorys': category.data},
                                 template_name = 'Ticket/create-ticket.html')
             else:
-                return render({'tickets': response.data},
-                                template_name = 'Enterprise/list-tickets.html')
+                return Response({'tickets': response.data},
+                                template_name = 'Ticket/list-tickets.html')
         return response
     

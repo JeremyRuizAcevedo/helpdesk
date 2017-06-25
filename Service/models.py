@@ -27,7 +27,7 @@ class Service(models.Model):
     ans = models.IntegerField()
     notification = models.BooleanField(default=False)
     notification_boss = models.BooleanField(default=False)
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

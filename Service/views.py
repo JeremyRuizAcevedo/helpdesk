@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import SessionAuthentication,\
     BasicAuthentication
@@ -6,9 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from Service.models import Service, Category, ServicePriority
 from Service.serializers import ServiceSerializer, CategorySerializer,\
     ServicePrioritySerializer
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
-from Enterprise.views import MyHTMLRenderer
 
 # Create your views here.
 
@@ -18,7 +17,7 @@ class CategoryAPI(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    renderer_classes = [TemplateHTMLRenderer]
+    renderer_classes = [JSONRenderer, TemplateHTMLRenderer]
     lookup_field = 'id'
 
     def list(self, request, *args, **kwargs):
@@ -34,8 +33,11 @@ class CategoryAPI(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         response = super(CategoryAPI, self).retrieve(request, *args, **kwargs)
         if request.accepted_renderer.format == 'html':
-            return Response({'category': response.data},
-                            template_name = 'Service/edit-category.html')
+            if 'name' not in request.GET:
+                return Response({'category': response.data},
+                                template_name = 'Service/edit-category.html')
+            else:
+                return redirect('Service:category-list')
         return response
 
 

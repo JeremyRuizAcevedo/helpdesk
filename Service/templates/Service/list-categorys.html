@@ -1,9 +1,10 @@
-{% extends 'Enterprise/base.html' %} {% block title %} Lista de Servicios {% endblock %}
-{% block content %}
+{% extends 'Enterprise/base.html' %} {% block title %} Lista de Servicios {% endblock %} {% block content %}
 <style>
-	table, th, td {
-    text-align:center;
-}
+	table,
+	th,
+	td {
+		text-align: center;
+	}
 </style>
 <div class="static-content">
 	<div class="page-content">
@@ -42,7 +43,7 @@
 										{% for category in data %}
 
 										<tr class="odd gradeX">
-											<td style="width:10%">{{category.name}}</a>
+											<td style="width:10%">{{category.name}}
 											</td>
 											<td>{{category.description}}</td>
 											<td style="width:10%"><a href="{% url 'Service:category-detail' id=category.id %}"><i class="ti ti-pencil"></i></a></td>
