@@ -1,9 +1,10 @@
-{% extends 'Enterprise/base.html' %} {% block title %} Lista de Áreas {% endblock %}
-{% block content %}
+{% extends 'Enterprise/base.html' %} {% block title %} Lista de Áreas {% endblock %} {% block content %}
 <style>
-	table, th, td {
-    text-align:center;
-}
+	table,
+	th,
+	td {
+		text-align: center;
+	}
 </style>
 <div class="static-content">
 	<div class="page-content">
@@ -46,9 +47,10 @@
 											</td>
 											<td>{{area.description}}</td>
 											<td style="width:10%"><a href="{% url 'Enterprise:area-detail' id=area.id %}"><i class="ti ti-pencil"></i></a></td>
-											<td style="width:10%"><a href="#"><i class="ti ti-trash"></i></a></td>
+											<td style="width:10%">
+												<buton id="{{area.id}}" class="delete"><i class="ti ti-trash"></i></buton>
+											</td>
 										</tr>
-
 										{% endfor %}
 									</tbody>
 								</table>
@@ -64,4 +66,47 @@
 	</div>
 	<!-- #page-content -->
 </div>
-{% endblock %} {% block js %} {% endblock %}
+{% endblock %} {% block js %}
+<script>
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+
+	$(".delete").click(function () {
+		id_area = $(this).attr('id');
+		console.log(id_area);
+		if (confirm("¿Está seguro de querer eliminar esta área?") == true) {
+			var csrftoken = getCookie('csrftoken');
+			console.log(csrftoken);
+			$.ajax({
+				url: '/areas/' + id_area + '/',
+				type: 'PATCH',
+				headers: { 'X-CSRFToken': csrftoken },
+				data: { "n_status": false },
+				dataType: "application/json",
+				success: function (data) {
+				}
+			});
+			window.location.href = "{% url 'Enterprise:area-list' %}"
+		} else {
+			console.log("You pressed Cancel!");
+		}
+	});
+	$(".delete").mouseenter(function () {
+		$('.delete').css('cursor', 'pointer');
+	})
+
+</script>
+{% endblock %}

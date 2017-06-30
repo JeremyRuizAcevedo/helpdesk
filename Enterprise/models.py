@@ -7,6 +7,7 @@ from random import randrange
 class Area(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField(blank=True, null=True)
+    n_status = models.BooleanField(default=True)
     
     def __str__(self):
         return self.name
@@ -18,6 +19,7 @@ class Employee(models.Model):
     dni = models.IntegerField()
     phone = models.IntegerField(blank=True, null=True)
     area = models.ForeignKey(Area)
+    n_status = models.BooleanField(default=True)
     
     def __str__(self):
         return self.user.get_full_name()

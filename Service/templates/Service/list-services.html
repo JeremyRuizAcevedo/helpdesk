@@ -51,9 +51,10 @@
 											<td style="width:10%">{{service.priority.name}}</td>
 											<td style="width:10%">{{service.ans}}</td>
 											<td style="width:10%"><a href="{% url 'Service:service-detail' id=service.id %}"><i class="ti ti-pencil"></i></a></td>
-											<td style="width:10%"><a href="#"><i class="ti ti-trash"></i></a></td>
+											<td style="width:10%">
+												<buton id="{{service.id}}" class="delete"><i class="ti ti-trash"></i></buton>
+											</td>
 										</tr>
-
 										{% endfor %}
 									</tbody>
 									</tbody>
@@ -70,4 +71,47 @@
 	</div>
 	<!-- #page-content -->
 </div>
-{% endblock %} {% block js %} {% endblock %}
+{% endblock %}{% block js %}
+<script>
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+
+	$(".delete").click(function () {
+		id_service = $(this).attr('id');
+		console.log(id_service);
+		if (confirm("¿Está seguro de querer eliminar este servicio?") == true) {
+			var csrftoken = getCookie('csrftoken');
+			console.log(csrftoken);
+			$.ajax({
+				url: '/service/services/' + id_service + '/',
+				type: 'PATCH',
+				headers: { 'X-CSRFToken': csrftoken },
+				data: { "n_status": false },
+				dataType: "application/json",
+				success: function (data) {
+				}
+			});
+			window.location.href = "{% url 'Service:service-list' %}"
+		} else {
+			console.log("You pressed Cancel!");
+		}
+	});
+	$(".delete").mouseenter(function () {
+		$('.delete').css('cursor', 'pointer');
+	})
+
+</script>
+{% endblock %}

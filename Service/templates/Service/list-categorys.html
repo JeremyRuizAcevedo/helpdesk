@@ -9,15 +9,11 @@
 <div class="static-content">
 	<div class="page-content">
 		<ol class="breadcrumb">
-
 			<li><a href="{% url 'Enterprise:dashboard' %}">Dashboard</a></li>
 			<li><a href="{% url 'Service:category-list' %}">Categorías</a></li>
 			<li class="active"><a href="{% url 'Service:category-list' %}">Listado de Categorías</a></li>>
-
 		</ol>
 		<div class="container-fluid">
-
-
 			<div class="alert alert-info">
 				<h3>Listado de Categorías</h3>
 			</div>
@@ -41,15 +37,15 @@
 									</thead>
 									<tbody>
 										{% for category in data %}
-
 										<tr class="odd gradeX">
 											<td style="width:10%">{{category.name}}
 											</td>
 											<td>{{category.description}}</td>
 											<td style="width:10%"><a href="{% url 'Service:category-detail' id=category.id %}"><i class="ti ti-pencil"></i></a></td>
-											<td style="width:10%"><a href="#"><i class="ti ti-trash"></i></a></td>
+											<td style="width:10%">
+												<buton id="{{category.id}}" class="delete"><i class="ti ti-trash"></i></buton>
+											</td>
 										</tr>
-
 										{% endfor %}
 									</tbody>
 								</table>
@@ -59,10 +55,51 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
-		<!-- .container-fluid -->
 	</div>
-	<!-- #page-content -->
 </div>
-{% endblock %} {% block js %} {% endblock %}
+{% endblock %} {% block js %}
+<script>
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+
+	$(".delete").click(function () {
+		id_category = $(this).attr('id');
+		console.log(id_category);
+		var txt;
+		if (confirm("¿Está seguro de querer eliminar esta categoría?") == true) {
+			var csrftoken = getCookie('csrftoken');
+			console.log(csrftoken);
+			$.ajax({
+				url: '/service/categorys/' + id_category + '/',
+				type: 'PATCH',
+				headers: { 'X-CSRFToken': csrftoken },
+				data: { "n_status": false },
+				dataType: "application/json",
+				success: function (data) {
+				}
+			});
+			window.location.href = "{% url 'Service:category-list' %}"
+		} else {
+			console.log("You pressed Cancel!");
+		}
+	});
+	$(".delete").mouseenter(function () {
+		$('.delete').css('cursor', 'pointer');
+	})
+
+</script>
+{% endblock %}

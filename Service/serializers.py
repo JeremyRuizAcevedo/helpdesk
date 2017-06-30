@@ -9,7 +9,7 @@ class CategorySerializer(ModelSerializer):
     services = SerializerMethodField()
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description', 'services']
+        fields = ['id', 'name', 'description', 'n_status','services']
         read_only_fields = ['id']
     
 #     def to_representation(self, obj):
@@ -38,10 +38,16 @@ class ServicePrioritySerializer(ModelSerializer):
 
 
 class ServiceSerializer(ModelSerializer):
-    category = CategorySerializer()
-    priority = ServicePrioritySerializer()
     class Meta:
         model = Service
         fields = ['id', 'name', 'priority', 'ans', 'notification',
-                  'notification_boss', 'category']
+                  'notification_boss', 'category', 'n_status']
         read_only_fields = ['id', 'notification', 'notification_boss']
+    
+    def __init__(self, *args, **kwargs):
+        super(ServiceSerializer, self).__init__(*args, **kwargs)
+ 
+        if self.context['request'].method == 'GET':
+            self.fields['category'] = CategorySerializer(read_only=True, context=kwargs['context'])
+            self.fields['priority'] = ServicePrioritySerializer(read_only=True, context=kwargs['context'])
+

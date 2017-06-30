@@ -15,7 +15,7 @@ from rest_framework.response import Response
 class CategoryAPI(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
-    queryset = Category.objects.all()
+    queryset = Category.objects.filter(n_status=True)
     serializer_class = CategorySerializer
     renderer_classes = [JSONRenderer, TemplateHTMLRenderer]
     lookup_field = 'id'
@@ -41,13 +41,21 @@ class CategoryAPI(ModelViewSet):
         return response
 
 
+class ServicePriorityAPI(ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = ServicePriority.objects.all()
+    serializer_class = ServicePrioritySerializer
+    renderer_classes = [JSONRenderer, TemplateHTMLRenderer]
+    lookup_field = 'id'
+
+
 class ServiceAPI(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
-    queryset = Service.objects.all()
+    queryset = Service.objects.filter(n_status=True)
     serializer_class = ServiceSerializer
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'Service/list-services.html'
+    renderer_classes = [JSONRenderer, TemplateHTMLRenderer]
     lookup_field = 'id'
 
     def list(self, request, *args, **kwargs):
@@ -62,3 +70,13 @@ class ServiceAPI(ModelViewSet):
             response = super(ServiceAPI, self).list(request, *args, **kwargs)
             return Response({'data': response.data},
                                 template_name = 'Service/list-services.html')
+    
+    def retrieve(self, request, *args, **kwargs):
+        response = super(ServiceAPI, self).retrieve(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            if 'name' not in request.GET:
+                return Response({'service': response.data},
+                                template_name = 'Service/edit-service.html')
+            else:
+                return redirect('Service:service-list')
+        return response
