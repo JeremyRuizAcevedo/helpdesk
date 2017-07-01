@@ -14,6 +14,7 @@ from Enterprise.serializers import EmployeeSerializer, TechnicalSerializer,\
     AreaSerializer
 from Enterprise.models import Employee, Technical, Area
 from rest_framework.urls import template_name
+from django.http.response import JsonResponse
 # Create your views here.
 
 class Login(APIView):
@@ -77,8 +78,8 @@ class AreaAPI(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = AreaSerializer
-    queryset = Area.objects.all()
-    renderer_classes = [TemplateHTMLRenderer]
+    queryset = Area.objects.filter(n_status=True)
+    renderer_classes = [JSONRenderer, TemplateHTMLRenderer]
     lookup_field = 'id'
 
     def list(self, request, *args, **kwargs):
@@ -94,17 +95,19 @@ class AreaAPI(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         response = super(AreaAPI, self).retrieve(request, *args, **kwargs)
         if request.accepted_renderer.format == 'html':
-            return Response({'area': response.data},
-                            template_name = 'Service/edit-area.html')
+            if 'name' not in request.GET:
+                return Response({'area': response.data},
+                            template_name = 'Enterprise/edit-area.html')
+            else:
+                return redirect('Enterprise:area-list')
         return response
 
 class EmployeeAPI(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = EmployeeSerializer
-    queryset = Employee.objects.all()
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'Enterprise/list-employees.html'
+    queryset = Employee.objects.filter(n_status=True)
+    renderer_classes = [JSONRenderer, TemplateHTMLRenderer]
     lookup_field = 'id'
     
     def list(self, request, *args, **kwargs):

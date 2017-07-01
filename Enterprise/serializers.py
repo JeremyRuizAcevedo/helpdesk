@@ -1,13 +1,20 @@
 from rest_framework.serializers import ModelSerializer
 from Enterprise.models import Employee, Technical, Area
 from django.contrib.auth.models import User
+from rest_framework.fields import SerializerMethodField
+from django.core.mail import send_mail
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 class UserSerializer(ModelSerializer):
-
+    name = SerializerMethodField(read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email']
+        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'email', 'name']
+        write_only_fields = ['password']
 
+    def get_name(self, obj):
+        return obj.get_full_name()
 
 class AreaSerializer(ModelSerializer):
 
@@ -18,14 +25,45 @@ class AreaSerializer(ModelSerializer):
 
 class EmployeeSerializer(ModelSerializer):
     user = UserSerializer()
-
     class Meta:
         model = Employee
         fields = '__all__'
+        
+    def __init__(self, *args, **kwargs):
+        super(EmployeeSerializer, self).__init__(*args, **kwargs)
+
+        if self.context['request'].method == 'GET':
+            self.fields['area'] = AreaSerializer(read_only=True, context=kwargs['context'])
+
+    def create(self, validated_data):
+        username = validated_data["user"]["username"]
+        first_name = validated_data["user"]["first_name"]
+        last_name = validated_data["user"]["last_name"]
+        email = validated_data["user"]["email"]
+        password = validated_data["user"]["password"]
+        dni = validated_data["dni"]
+        phone = validated_data["phone"]
+        area = validated_data["area"]
+        user = User.objects.create(username=username, first_name=first_name,
+                                   last_name=last_name, email=email)
+        user.set_password(password)
+        user.save()
+        employee = Employee.objects.create(user=user, dni=dni, phone=phone,area=area)
+        send_mail(
+                "Nueva cuenta de empleado",
+                "Ustede ha sido registrado con exito y forma parte del sistema\
+                de mesa de ayuda. Esta es su contraseña: "+ password + ". Se le \
+                sugiere cambiarla e iniciar sesion",
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
+        )
+        
+        return employee
 
 
 class TechnicalSerializer(ModelSerializer):
-    employee = EmployeeSerializer()
+#     employee = EmployeeSerializer()
 
     class Meta:
         model = Technical

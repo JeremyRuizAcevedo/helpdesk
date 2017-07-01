@@ -1,4 +1,4 @@
-{% extends 'Enterprise/base.html' %} {% block title %} Lista de Servicios {% endblock %} {% block content %}
+{% extends 'Enterprise/base.html' %} {% block title %} Lista de Empleados {% endblock %} {% block content %}
 <style>
 	table,
 	th,
@@ -9,17 +9,13 @@
 <div class="static-content">
 	<div class="page-content">
 		<ol class="breadcrumb">
-
 			<li><a href="{% url 'Enterprise:dashboard' %}">Dashboard</a></li>
-			<li><a href="{% url 'Service:service-list' %}">Servicios</a></li>
-			<li class="active"><a href="{% url 'Service:service-list' %}">Listado de Servicios</a></li>>
-
+			<li><a href="{% url 'Enterprise:employee-list' %}">Empleados</a></li>
+			<li class="active"><a href="{% url 'Enterprise:employee-list' %}">Listado de Empleados</a></li>>
 		</ol>
 		<div class="container-fluid">
-
-
 			<div class="alert alert-info">
-				<h3>Listado de Servicios</h3>
+				<h3>Listado de Empleados</h3>
 			</div>
 			<div data-widget-group="group1">
 				<div class="row">
@@ -33,25 +29,26 @@
 								<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
 									<thead>
 										<tr>
-											<th>Servicio</th>
-											<th>Categoría</th>
-											<th>Prioridad</th>
-											<th>ANS</th>
+											<th>Código</th>
+											<th>Nombre</th>
+                      <th>Email</th>
+											<th>Area</th>
+											<th>Teléfono</th>
 											<th>Editar</th>
 											<th>Eliminar</th>
 										</tr>
 									</thead>
 									<tbody>
-										{% for service in data %}
+										{% for employee in employees %}
 										<tr class="odd gradeX">
-											<td style="text-align: left">{{service.name}}
-											</td>
-											<td style="width:20%">{{service.category.name}}</td>
-											<td style="width:10%">{{service.priority.name}}</td>
-											<td style="width:10%">{{service.ans}}</td>
-											<td style="width:10%"><a href="{% url 'Service:service-detail' id=service.id %}"><i class="ti ti-pencil"></i></a></td>
-											<td style="width:10%">
-												<buton id="{{service.id}}" class="delete"><i class="ti ti-trash"></i></buton>
+											<td style="width:10%">{{employee.code}}</td>
+											<td style="width:25%">{{employee.user.name}}</td>
+											<td style="width:20%">{{employee.user.email}}</td>
+                      <td style="width:20%">{{employee.area.name}}</td>
+                      <td style="width:10%">{{employee.phone}}</td>
+											<td style="width:5%"><a href="{% url 'Enterprise:employee-detail' id=employee.id %}"><i class="ti ti-pencil"></i></a></td>
+											<td style="width:5%">
+												<buton id="{{employee.id}}" class="delete"><i class="ti ti-trash"></i></buton>
 											</td>
 										</tr>
 										{% endfor %}
@@ -64,11 +61,8 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
-		<!-- .container-fluid -->
 	</div>
-	<!-- #page-content -->
 </div>
 {% endblock %}{% block js %}
 <script>
@@ -89,13 +83,13 @@
 	}
 
 	$(".delete").click(function () {
-		id_service = $(this).attr('id');
-		console.log(id_service);
-		if (confirm("¿Está seguro de querer eliminar este servicio?") == true) {
+		id_employee = $(this).attr('id');
+		console.log(id_employee);
+		if (confirm("¿Está seguro de querer eliminar este empleado?") == true) {
 			var csrftoken = getCookie('csrftoken');
 			console.log(csrftoken);
 			$.ajax({
-				url: '/service/services/' + id_service + '/',
+				url: '/employees/' + id_employee + '/',
 				type: 'PATCH',
 				headers: { 'X-CSRFToken': csrftoken },
 				data: { "n_status": false },
@@ -103,7 +97,7 @@
 				success: function (data) {
 				}
 			});
-			window.location.href = "{% url 'Service:service-list' %}"
+			window.location.href = "{% url 'Enterprise:employee-list' %}"
 		} else {
 			console.log("You pressed Cancel!");
 		}

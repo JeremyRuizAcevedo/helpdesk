@@ -17,7 +17,7 @@ class TicketSerializer(ModelSerializer):
 #     categorys = SerializerMethodField()
 #     service_types = SerializerMethodField()
     service_type = ServiceTypeSerializer(read_only=True)
-    employee = EmployeeSerializer(read_only=True)
+#     employee = EmployeeSerializer(read_only=True)
     date = DateTimeField(format="%d-%m-%Y %H:%M")
     class Meta:
         model = Ticket

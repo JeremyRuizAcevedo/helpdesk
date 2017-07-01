@@ -2,22 +2,17 @@
 <div class="static-content">
   <div class="page-content">
     <ol class="breadcrumb">
-
       <li><a href="index.html">Home</a></li>
       <li><a href="#">UI Elements</a></li>
       <li class="active"><a href="ui-forms.html">Forms</a></li>
-
     </ol>
     <div class="container-fluid">
-
       <div data-widget-group="group1">
         <div class="row">
           <div class="col-sm-12">
-
             <div class="panel panel-midnightblue" data-widget='{"draggable": "false"}'>
               <div class="panel-heading">
                 <h2>Nuevo Empleado</h2>
-                <!-- <div class="panel-ctrls" data-actions-container="" data-action-collapse='{"target": ".panel-body, .panel-footer"}'></div> -->
               </div>
               <div class="panel-body">
                 <div class="tab-content">
@@ -26,56 +21,47 @@
                       <div class="form-group">
                         <label for="focusedinput" class="col-sm-2 control-label">DNI</label>
                         <div class="col-sm-8">
-                          <input type="number" class="form-control" id="focusedinput" placeholder="Ingrese su DNI" maxlength="10" onkeypress="return valida(event)">
+                          <input type="number" class="form-control" id="dni" placeholder="Ingrese su DNI" maxlength="8" minlength="8">
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="focusedinput" class="col-sm-2 control-label">Nombres</label>
                         <div class="col-sm-8">
-                          <input type="text" class="form-control" id="focusedinput" maxlength="9" minlength="7" onkeypress="return valida(event)">
+                          <input type="text" class="form-control" id="first_name">
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="focusedinput" class="col-sm-2 control-label">Apellidos</label>
                         <div class="col-sm-8">
-                          <input type="text" class="form-control" id="focusedinput" maxlength="9" minlength="7" onkeypress="return valida(event)">
+                          <input type="text" class="form-control" id="last_name">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="focusedinput" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" id="email">
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="focusedinput" class="col-sm-2 control-label">Teléfono</label>
                         <div class="col-sm-8">
-                          <input type="number" class="form-control" id="focusedinput" maxlength="9" minlength="7" onkeypress="return valida(event)">
+                          <input type="number" class="form-control" id="phone" maxlength="9" minlength="7" onkeypress="return valida(event)">
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="col-sm-2 control-label">Área</label>
                         <div class="col-sm-8">
-                          <select name="area" class="form-control">
+                          <select class="form-control" id="area">
 														{% for area in areas %}
 															<option value="{{ area.id }}">{{ area.name }}</option>
 														{% endfor %}
 													</select>
                         </div>
                       </div>
-                      <script>
-                        function valida(e) {
-                          tecla = (document.all) ? e.keyCode : e.which;
-
-                          //Tecla de retroceso para borrar, siempre la permite
-                          if (tecla == 8) {
-                            return true;
-                          }
-
-                          // Patron de entrada, en este caso solo acepta numeros
-                          patron = /[0-9]/;
-                          tecla_final = String.fromCharCode(tecla);
-                          return patron.test(tecla_final);
-                        }
-                      </script>
                       <div class="panel-footer">
                         <div class="row">
                           <div class="col-sm-8 col-sm-offset-2">
-                            <input type="submit" class="btn btn-primary pull-right" value="Crear">
+                            <button id="create" class="btn btn-primary pull-right">Crear</button>
                             <button class="btn-default btn">Cancel</button>
                           </div>
                         </div>
@@ -89,8 +75,67 @@
         </div>
       </div>
     </div>
-    <!-- .container-fluid -->
   </div>
-  <!-- #page-content -->
 </div>
+{% endblock %} {% block js %}
+<script>
+  function valida(e) {
+    tecla = (document.all) ? e.keyCode : e.which;
+    //Tecla de retroceso para borrar, siempre la permite
+    if (tecla == 8) {
+      return true;
+    }
+    // Patron de entrada, en este caso solo acepta numeros
+    patron = /[0-9]/;
+    tecla_final = String.fromCharCode(tecla);
+    return patron.test(tecla_final);
+  }
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  $("#create").click(function () {
+    var csrftoken = getCookie('csrftoken');
+    var dni = $("#dni").val();
+    var first_name = $("#first_name").val();
+    var last_name = $("#last_name").val();
+    var email = $("#email").val();
+    var phone = $("#phone").val();
+    var area = $("#area").val();
+
+    $.ajax({
+      url: '/employees/',
+      type: 'POST',
+      headers: { 'X-CSRFToken': csrftoken, 'Content-Type': "application/json" },
+      data: JSON.stringify({
+        "dni": dni,
+        "user": {
+          "username": first_name + "." + last_name,
+          "password": "1234",
+          "first_name": first_name,
+          "last_name": last_name,
+          "email": email
+        },
+        "phone": phone,
+        "area": area
+      }),
+      dataType: "application/json",
+      success: function (data) {
+      }
+    });
+  });
+
+</script>
 {% endblock %}
