@@ -1,6 +1,7 @@
 from django.db import models
 from Enterprise.models import Employee, Technical
 from random import randrange
+from Service.models import Service
 
 # Create your models here.
 class ServiceType(models.Model):
@@ -19,7 +20,7 @@ class Ticket(models.Model):
     status = models.BooleanField(default=False)
     solution = models.TextField(default="")
     employee = models.ForeignKey(Employee,null=True, blank=True)
-    service = models.ForeignKey(Technical, null=True, blank=True)
+    service = models.ForeignKey(Service, null=True, blank=True)
     service_type = models.ForeignKey(ServiceType)
     
     def __str__(self):
