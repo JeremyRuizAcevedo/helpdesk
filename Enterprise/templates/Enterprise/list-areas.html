@@ -9,15 +9,11 @@
 <div class="static-content">
 	<div class="page-content">
 		<ol class="breadcrumb">
-
 			<li><a href="{% url 'Enterprise:dashboard' %}">Dashboard</a></li>
 			<li><a href="{% url 'Enterprise:area-list' %}">Áreas</a></li>
 			<li class="active"><a href="{% url 'Enterprise:area-list' %}">Listado de Áreas</a></li>>
-
 		</ol>
 		<div class="container-fluid">
-
-
 			<div class="alert alert-info">
 				<h3>Listado de Categorías</h3>
 			</div>
@@ -41,7 +37,6 @@
 									</thead>
 									<tbody>
 										{% for area in areas %}
-
 										<tr class="odd gradeX">
 											<td style="width:30%">{{area.name}}</a>
 											</td>
@@ -60,11 +55,8 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
-		<!-- .container-fluid -->
 	</div>
-	<!-- #page-content -->
 </div>
 {% endblock %} {% block js %}
 <script>

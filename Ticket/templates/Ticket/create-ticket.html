@@ -40,7 +40,7 @@
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="col-sm-2 control-label">Categoria</label>
+												<label class="col-sm-2 control-label">Categoría(*)</label>
 												<div class="col-sm-8">
 													<select name="category" class="form-control" id="category">
 														<option>--Seleccione categoría--</option>
@@ -71,12 +71,14 @@
 											<div class="form-group">
 												<label for="selector1" class="col-sm-2 control-label">Prioridad :</label>
 												<div class="col-sm-6">
-													<select name="priority" class="form-control">
+													<select name="priority" class="form-control" id="priority">
 															<option>-----</option>
-															<option>Alta</option>
-														    <option>Media</option>
-														    <option>Baja</option>
 													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="selector1" class="col-sm-2 control-label">Técnico asignado :</label>
+												<div class="col-sm-8" id="technical">
 												</div>
 											</div>
 											<div class="panel-footer">
@@ -112,13 +114,30 @@
 
 	$("#category").change(function () {
 		var id_category = $("#category").val();
-		$.get("/service/categorys/" + id_category + "/", function (data) {
+		$.get("/service/categorys/" + id_category + "/", { "category_services": "" }, function (data) {
 			var html = "";
 			for (var i = 0; i < data.services.length; i++) {
 				html += "<option value='" + data.services[i].id + "'>" + data.services[i].name + "</option>"
 			}
 			$("#service").html(html);
 		});
+	});
+
+	$("#service").change(function () {
+		var id_service = $("#service").val();
+		$.get("/service/services/" + id_service + "/", function (data) {
+			console.log(data);
+			var html = "";
+			html += "<option value='" + data.priority.id + "'>" + data.priority.name + "</option>"
+			$("#priority").html(html);
+		});
+	});
+
+	$.get("/technicals/", { "busy_technicals": "" }, function (data) {
+		console.log(data);
+		var html = "";
+		html += "<option value='" + data.priority.id + "'>" + data.priority.name + "</option>"
+		$("#technical").html(html);
 	});
 
 </script>

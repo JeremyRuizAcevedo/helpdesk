@@ -5,6 +5,7 @@ from rest_framework.fields import SerializerMethodField
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 from django.conf import settings
+from Service.serializers import ServiceSerializer
 
 class UserSerializer(ModelSerializer):
     name = SerializerMethodField(read_only=True)
@@ -63,8 +64,14 @@ class EmployeeSerializer(ModelSerializer):
 
 
 class TechnicalSerializer(ModelSerializer):
-#     employee = EmployeeSerializer()
-
     class Meta:
         model = Technical
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(TechnicalSerializer, self).__init__(*args, **kwargs)
+
+        if self.context['request'].method == 'GET':
+            self.fields['employee'] = EmployeeSerializer(read_only=True, context=kwargs['context'])
+            self.fields['services'] = ServiceSerializer(read_only=True, many=True,
+                                                        context=kwargs['context'])

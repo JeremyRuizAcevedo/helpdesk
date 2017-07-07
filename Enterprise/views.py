@@ -15,6 +15,8 @@ from Enterprise.serializers import EmployeeSerializer, TechnicalSerializer,\
 from Enterprise.models import Employee, Technical, Area
 from rest_framework.urls import template_name
 from django.http.response import JsonResponse
+from Ticket.models import Ticket
+from django.db.models.aggregates import Count
 # Create your views here.
 
 class Login(APIView):
@@ -133,7 +135,21 @@ class EmployeeAPI(ModelViewSet):
 
 class TechnicalAPI(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  
     serializer_class = TechnicalSerializer
-    queryset = Technical.objects.all()
+    queryset = Technical.objects.filter(employee__n_status=True)
     lookup_field = 'id'
+    
+    def get_queryset(self):
+#         if 'ticket' in self.request.query_params:
+        busy_technicals = list(Ticket.objects.all().values("was_attended").distinct())
+        busy_technicals_temp = []
+        for busy_technical in busy_technicals:
+            if busy_technical not in busy_technicals_temp:
+                busy_technicals_temp.append(busy_technical)
+        print(busy_technicals_temp)
+#             free_technicals = Technical.objects.all().exclude()
+#         else:
+        return Technical.objects.filter(employee__n_status=True)
+            
+

@@ -22,7 +22,8 @@ class Ticket(models.Model):
     employee = models.ForeignKey(Employee,null=True, blank=True)
     service = models.ForeignKey(Service, null=True, blank=True)
     service_type = models.ForeignKey(ServiceType)
-    
+    was_attended = models.ForeignKey(Technical, null=True, blank=True)
+     
     def __str__(self):
         return str(self.number) + " - " + self.subject
 

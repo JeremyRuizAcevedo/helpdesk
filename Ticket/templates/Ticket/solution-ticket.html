@@ -1,0 +1,83 @@
+{% extends 'Enterprise/base.html' %} {% block title %} Solución de Ticket {% endblock %} {% block content %}
+<div class="static-content">
+	<div class="page-content">
+		<ol class="breadcrumb">
+			<li><a href="index.html">Home</a></li>
+			<li><a href="#">UI Elements</a></li>
+			<li class="active"><a href="ui-forms.html">Forms</a></li>
+		</ol>
+		<div class="container-fluid">
+			<div data-widget-group="group1">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="panel panel-midnightblue" data-widget='{"draggable": "false"}'>
+							<div class="panel-heading">
+								<h2>Registrar Solución<strong> N° 107</strong> </h2>
+								<h3><button class="btn btn-info-alt btn pull-right">Guardar</button></h3>
+								<br>
+							</div>
+							<div class="panel-body">
+								<div class="tab-content">
+									<div class="tab-pane active" id="horizontal-form">
+										<form class="form-horizontal">
+											<div class="form-group">
+												<label for="selector1" class="col-sm-2 control-label">Tipo de Ticket :</label>
+												<div class="col-sm-6">
+													<select disabled type="text" name="priority" class="form-control">
+															<option id="disabledinput">Incidente</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="focusedinput" class="col-sm-2 control-label">Asunto :</label>
+												<div class="col-sm-6">
+													<input disabled type="text" class="form-control" id="disabledinput" placeholder="Falla de Firewall">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="txtarea1" class="col-sm-2 control-label">Descripción :</label>
+												<div class="col-sm-6"><textarea disabled type="text" name="txtarea1" id="disabledinput" cols="50" rows="4" class="form-control" placeholder="Se detectó que había un ..."></textarea></div>
+											</div>
+											<div class="form-group">
+												<label for="selector1" class="col-sm-2 control-label">ANS:</label>
+												<div class="col-sm-6">
+													<input disabled type="time" name="priority" class="form-control">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="txtarea1" class="col-sm-2 control-label">Solución :</label>
+												<div class="col-sm-6"><textarea type="text" name="txtarea1" id="input" cols="50" rows="4" class="form-control" placeholder="Acciones"></textarea></div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer role="contentinfo">
+			<div class="clearfix">
+				<ul class="list-unstyled list-inline pull-left">
+					<li>
+						<h6 style="margin: 0;">&copy; 2015 Avenxo</h6>
+					</li>
+				</ul>
+				<button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="ti ti-arrow-up"></i></button>
+			</div>
+		</footer>
+	</div>
+</div>
+<script>
+	$(document).ready(function () {
+		$('.summernote').summernote({
+			height: 200
+		});
+
+		$('.airmode').summernote({
+			airMode: true
+		});
+	});
+
+</script>

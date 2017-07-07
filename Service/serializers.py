@@ -12,23 +12,23 @@ class CategorySerializer(ModelSerializer):
         fields = ['id', 'name', 'description', 'n_status','services']
         read_only_fields = ['id']
     
-#     def to_representation(self, obj):
-#         """Move fields from profile to user representation."""
-#         rep = super().to_representation(obj)
-#         print(self.context['request'])
-#         if 'detail' in self.context['request']:
-#             rep.pop('services')
-#         return rep
+    def to_representation(self, obj):
+        """Move fields from profile to user representation."""
+        rep = super().to_representation(obj)
+        if 'category_services' not in self.context['request'].GET:
+            rep.pop('services')
+        return rep
 # # 
     def get_services(self,obj):
-        services = Service.objects.filter(category=obj)
-        list_services = []
-        dict_service = {}
-        for service in services:
-            dict_service = {'id': service.id, 'name': service.name}
-            list_services.append(dict_service)
-        return list_services
-            
+        if "category_services" in self.context["request"].GET:
+            services = Service.objects.filter(category=obj)
+            list_services = []
+            dict_service = {}
+            for service in services:
+                dict_service = {'id': service.id, 'name': service.name}
+                list_services.append(dict_service)
+            return list_services
+
 
 class ServicePrioritySerializer(ModelSerializer):
 

@@ -61,7 +61,7 @@ class ServiceAPI(ModelViewSet):
     def list(self, request, *args, **kwargs):
         if 'create' in request.query_params:
             categorys = Category.objects.all()
-            category = CategorySerializer(categorys, many=True)
+            category = CategorySerializer(categorys, many=True, context={'request': request})
             prioritys = ServicePriority.objects.all()
             priority = ServicePrioritySerializer(prioritys, many=True)
             return Response({'categorys': category.data, 'prioritys': priority.data},

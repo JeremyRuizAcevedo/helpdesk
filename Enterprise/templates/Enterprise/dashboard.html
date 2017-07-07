@@ -1,14 +1,174 @@
-{% extends 'Enterprise/base.html' %}
-{% block title %} Dashboard {% endblock %}
-
-{% block content %}
+{% extends 'Enterprise/base.html' %} {% block title %} Dashboard {% endblock %} {% block content %}
 <div class="static-content">
-    <div class="page-content">
-        <ol class="breadcrumb">
-            <li class=""><a href="{% url 'Enterprise:dashboard' %}">Home</a></li>
-            <li class="active"><a href="{% url 'Enterprise:dashboard' %}">Dashboard</a></li>
-        </ol>
+  <div class="page-content">
+    <ol class="breadcrumb">
+      <li class=""><a href="{% url 'Enterprise:dashboard' %}">Home</a></li>
+      <li class="active"><a href="{% url 'Enterprise:dashboard' %}">Dashboard</a></li>
+    </ol>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="info-tile tile-orange">
+            <div class="tile-icon"><i class="ti ti-eye"></i></div>
+            <div class="tile-heading"><span>Sin resolver</span></div>
+            <div class="tile-body"><span>3</span></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="info-tile tile-info">
+            <div class="tile-icon"><i class="ti ti-user"></i></div>
+            <div class="tile-heading"><span>Asignados</span></div>
+            <div class="tile-body"><span>6</span></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="info-tile tile-success">
+            <div class="tile-icon"><i class="ti ti-check-box"></i></div>
+            <div class="tile-heading"><span>Resueltos</span></div>
+            <div class="tile-body"><span>4</span></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="info-tile tile-danger">
+            <div class="tile-icon"><i class="ti ti-bar-chart-alt"></i></div>
+            <div class="tile-heading"><span>Total de Tickets</span></div>
+            <div class="tile-body"><span>9 </span></div>
+          </div>
+        </div>
+      </div>
+      <div data-widget-group="group1">
+        <div class="row">
+          <div class="col-md-6">
+          </div>
+          <div class="col-md-6">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="panel panel-gray" data-widget='{"draggable": "false"}'>
+              <div class="panel-heading">
+                <h2>Actividades Recientes</h2>
+                <div class="panel-ctrls button-icon-bg" data-actions-container="" data-action-collapse='{"target": ".panel-body"}' data-action-colorpicker=''
+                  data-action-refresh-demo='{"type": "circular"}'>
+                </div>
+              </div>
+              <div class="panel-body scroll-pane" style="height: 320px;">
+                <div class="scroll-content">
+                  <ul class="mini-timeline">
+                    <li class="mini-timeline-lime">
+                      <div class="timeline-icon"></div>
+                      <div class="timeline-body">
+                        <div class="timeline-content">
+                          <a href="#/" class="name">Carolina (tu)</a> asignaste un ticket a <a href="#/" class="name">Mariana Cardona</a>
+                          <a href="#/">TK- 108</a>
+                          <span class="time">4 mins ago</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="mini-timeline-info">
+                      <div class="timeline-icon"></div>
+                      <div class="timeline-body">
+                        <div class="timeline-content">
+                          <a href="#/" class="name">Gustavo Belenguer</a>resolvió su ticket asignado<a href="#/">TK -102</a>
+                          <span class="time">12 mins ago</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="mini-timeline-indigo">
+                      <div class="timeline-icon"></div>
+                      <div class="timeline-body">
+                        <div class="timeline-content">
+                          <a href="#/" class="name">Carolina (tu)</a> reasignaste un ticket a <a href="#/" class="name">Frend Pratt</a>
+                          <a href="#/">TK -107</a>
+                          <span class="time">6 hours ago</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="mini-timeline-lime">
+                      <div class="timeline-icon"></div>
+                      <div class="timeline-body">
+                        <div class="timeline-content">
+                          <a href="#/" class="name">Carolina (tu)</a>resolviste un reclamo<a href="#/">TK-101</a>
+                          <span class="time">7 hours ago</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="mini-timeline-default">
+                      <div class="timeline-body ml-n">
+                        <div class="timeline-content">
+                          <button type="button" data-loading-text="Loading..." class="loading-example-btn btn btn-sm btn-default">See more</button>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-midnightblue widget-progress" data-widget='{"draggable": "false"}'>
+              <div class="panel-heading">
+                <h2>Pendientes</h2>
+                <div class="panel-ctrls button-icon-bg" data-actions-container="" data-action-refresh-demo='{"type": "circular"}'>
+                </div>
+              </div>
+              <div class="panel-body scroll-pane" style="height: 250px;">
+                <div class="scroll-content">
+                  <table class="table m-n">
+                    <thead>
+                      <tr>
+                        <th style="color:#FFFFFF">ID</th>
+                        <th style="color:#FFFFFF">Tipo</th>
+                        <th style="color:#FFFFFF">Asunto</th>
+                        <th style="color:#FFFFFF">Prioridad</th>
+                        <th style="color:#FFFFFF">Fecha</th>
+                        <th style="color:#FFFFFF">Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td style="color:#FFFFFF">112</td>
+                      <td style="color:#FFFFFF">Incidente</td>
+                      <td style="color:#FFFFFF">Falla de Firewall</td>
+                      <td style="color:#FFFFFF">Media</td>
+                      <td style="color:#FFFFFF">23/06/17</td>
+                      <td style="color:#FFFFFF">Sin asignar</td>
+                      </tr>
+                      <td style="color:#FFFFFF">110</td>
+                      <td style="color:#FFFFFF">Incidente</td>
+                      <td style="color:#FFFFFF">Falla de Router</td>
+                      <td style="color:#FFFFFF">Media</td>
+                      <td style="color:#FFFFFF">23/06/17</td>
+                      <td style="color:#FFFFFF">Sin asignar</td>
+                      </tr>
+                      <td style="color:#FFFFFF">109</td>
+                      <td style="color:#FFFFFF">Incidente</td>
+                      <td style="color:#FFFFFF">Problemas de conexión</td>
+                      <td style="color:#FFFFFF">Media</td>
+                      <td style="color:#FFFFFF">21/06/17</td>
+                      <td style="color:#FFFFFF">Sin asignar</td>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <div class="tabular">
+                  <div class="tabular-row">
+                    <div class="tabular-cell">
+                      <span class="status-total">Urgentes</span>
+                      <span class="status-value">0</span>
+                    </div>
+                    <div class="tabular-cell">
+                      <span class="status-pending">Pendientes</span>
+                      <span class="status-value">3</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-{% endblock %}
-{% block js %} {% endblock %}
+{% endblock %} {% block js %} {% endblock %}

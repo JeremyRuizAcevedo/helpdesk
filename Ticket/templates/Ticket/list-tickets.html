@@ -56,26 +56,28 @@
                       <th>Fecha de Registro</th>
                       <th>Tipo de Problema</th>
                       <th>Asunto</th>
+                      <th>Técnico Asignado</th>
                       <th>Estado</th>
-											<th>Editar</th>
+											<th>Detalle</th>
 											<th>Eliminar</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for ticket in tickets %}
                     <tr class="odd gradeX">
-                      <td>{{ticket.number}}</td>
+                      <td style="width:5%">{{ticket.number}}</td>
                       <td>{{ticket.employee.user.first_name}} {{ticket.employee.user.last_name}}</td>
-                      <td>{{ticket.date}}</td>
+                      <td style="width:10%">{{ticket.date}}</td>
                       <td>{{ticket.service_type.name}}</td>
                       <td>{{ticket.subject}}</td>
+                      <td>{{ticket.was_attended.employee.user.name}}</td>
                       {% if ticket.status %}
                       <td bgcolor="#B0E8AD" font="white">ATENDIDO</td>
                       {% else %}
                       <td bgcolor="#FF6161" font="white">SIN ATENDER</td>
                       {% endif %}
-                      <td style="width:10%"><a href="{% url 'Ticket:ticket-detail' id=ticket.id %}"><i class="ti ti-pencil"></i></a></td>
-                      <td style="width:10%"><a href="#"><i class="ti ti-trash"></i></a></td>
+                      <td style="width:5%"><a href="{% url 'Ticket:ticket-detail' id=ticket.id %}"><i class="ti ti-zoom-in"></i></a></td>
+                      <td style="width:5%"><a href="#"><i class="ti ti-trash"></i></a></td>
                     </tr>
                     {% endfor %}
                   </tbody>

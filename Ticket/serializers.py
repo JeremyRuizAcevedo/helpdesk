@@ -3,7 +3,7 @@ from Ticket.models import ServiceType, Ticket, Activity
 from rest_framework.fields import SerializerMethodField, DateTimeField
 from Service.models import Category
 from Service.serializers import CategorySerializer
-from Enterprise.serializers import EmployeeSerializer
+from Enterprise.serializers import EmployeeSerializer, TechnicalSerializer
 from rest_framework.settings import api_settings
 
 class ServiceTypeSerializer(ModelSerializer):
@@ -14,34 +14,30 @@ class ServiceTypeSerializer(ModelSerializer):
 
 
 class TicketSerializer(ModelSerializer):
-#     categorys = SerializerMethodField()
-#     service_types = SerializerMethodField()
     service_type = ServiceTypeSerializer(read_only=True)
-#     employee = EmployeeSerializer(read_only=True)
     date = DateTimeField(format="%d-%m-%Y %H:%M")
+
     class Meta:
         model = Ticket
         fields = ['id', 'number', 'subject', 'description', 'date', 'status',
-                  'solution', 'employee', 'service', 'service_type']
+                  'solution', 'employee', 'service', 'service_type', 'was_attended']
         read_only_fields = ['id'', number', 'date', 'employee']
 
-    
+    def __init__(self, *args, **kwargs):
+        super(TicketSerializer, self).__init__(*args, **kwargs)
+
+        if self.context['request'].method == 'GET':
+            self.fields['employee'] = EmployeeSerializer(read_only=True,
+                                                         context=kwargs['context'])
+            self.fields['was_attended'] = TechnicalSerializer(read_only=True,
+                                                              context=kwargs['context'])
+
 #     def to_representation(self, obj):
 #         """Move fields from profile to user representation."""
 #         rep = super().to_representation(obj)
 #         if 'create' in self.context['request']:
 #             rep.pop('number')
 #         return rep
-
-#     def get_categorys(self, obj):
-#         categorys = Category.objects.all()
-#         serializer = CategorySerializer(categorys, many=True)
-#         return serializer.data
-# 
-#     def get_service_types(self, obj):
-#         service_types = ServiceType.objects.all()
-#         serializer = ServiceTypeSerializer(service_types, many=True)
-#         return serializer.data
 
 
 class ActivitySerializer(ModelSerializer):
