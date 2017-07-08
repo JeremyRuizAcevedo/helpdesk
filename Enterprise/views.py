@@ -122,7 +122,7 @@ class EmployeeAPI(ModelViewSet):
         if request.accepted_renderer.format == 'html':
             if 'create' in request.query_params:
                 areas = Area.objects.all()
-                area = AreaSerializer(areas, many=True)
+                area = AreaSerializer(areas, many=True, context={'request': request})
                 return Response({'areas': area.data},
                                 template_name = 'Enterprise/create-employee.html')
             else:
@@ -157,10 +157,12 @@ class TechnicalAPI(ModelViewSet):
         if 'free_technical' in self.request.query_params:
             busy_technicals = list(Ticket.objects.\
                                    values_list("was_attended", flat=True).distinct())
+            print(busy_technicals)
             id_service = self.request.query_params["service"]
             free_technical = Technical.objects.\
                                 filter(employee__n_status=True, services__id=id_service).\
-                                exclude(employee__user__id__in=busy_technicals)
+                                exclude(id__in=busy_technicals)
+            print(free_technical)
             queryset = free_technical
         else:
             queryset = Technical.objects.filter(employee__n_status=True)

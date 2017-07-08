@@ -39,10 +39,10 @@ class EmployeeSerializer(ModelSerializer):
         
     def __init__(self, *args, **kwargs):
         super(EmployeeSerializer, self).__init__(*args, **kwargs)
-
+ 
         if self.context['request'].method == 'GET':
             self.fields['area'] = AreaSerializer(read_only=True, context=kwargs['context'])
-            
+
         if self.context['request'].method == 'GET' or self.context['request'].method == 'POST':
             self.fields.pop("n_status")
 
