@@ -22,6 +22,7 @@ class TicketAPI(ModelViewSet):
     serializer_class = TicketSerializer
     queryset = Ticket.objects.all()
     renderer_classes = [JSONRenderer, TemplateHTMLRenderer]
+    template_name = 'Ticket/list-tickets.html'
     lookup_field = 'id'
 
     def list(self, request, *args, **kwargs):
@@ -45,7 +46,7 @@ class TicketAPI(ModelViewSet):
         if request.accepted_renderer.format == 'html':
             if 'name' not in request.GET:
                 return Response({'ticket': response.data},
-                            template_name = 'Enterprise/edit-ticket.html')
+                            template_name = 'Ticket/edit-ticket.html')
             else:
                 return redirect('Ticket:ticket-list')
         return response

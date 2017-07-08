@@ -14,14 +14,13 @@ class ServiceTypeSerializer(ModelSerializer):
 
 
 class TicketSerializer(ModelSerializer):
-    service_type = ServiceTypeSerializer(read_only=True)
-    date = DateTimeField(format="%d-%m-%Y %H:%M")
+    date = DateTimeField(format="%d-%m-%Y %H:%M", read_only=True)
 
     class Meta:
         model = Ticket
         fields = ['id', 'number', 'subject', 'description', 'date', 'status',
                   'solution', 'employee', 'service', 'service_type', 'was_attended']
-        read_only_fields = ['id'', number', 'date', 'employee']
+        read_only_fields = ['id', 'number', 'date']
 
     def __init__(self, *args, **kwargs):
         super(TicketSerializer, self).__init__(*args, **kwargs)
@@ -31,6 +30,8 @@ class TicketSerializer(ModelSerializer):
                                                          context=kwargs['context'])
             self.fields['was_attended'] = TechnicalSerializer(read_only=True,
                                                               context=kwargs['context'])
+            self.fields['service_type'] = ServiceTypeSerializer(read_only=True,
+                                                         context=kwargs['context'])
 
 #     def to_representation(self, obj):
 #         """Move fields from profile to user representation."""

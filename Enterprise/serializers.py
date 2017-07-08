@@ -21,7 +21,14 @@ class AreaSerializer(ModelSerializer):
 
     class Meta:
         model = Area
-        fields = '__all__'
+        fields = ['id', 'name', 'description', "n_status"]
+        read_only_fields = ['id']
+#
+    def __init__(self, *args, **kwargs):
+        super(AreaSerializer, self).__init__(*args, **kwargs)
+
+        if self.context['request'].method == 'GET' or self.context['request'].method == 'POST':
+            self.fields.pop("n_status")
 
 
 class EmployeeSerializer(ModelSerializer):

@@ -34,10 +34,9 @@ class Login(APIView):
         password = request.data['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            if user.username == 'jeremy':
-                login(request, user)
+            login(request, user)
         else:
-            self.message = "Username o password incorrectos"
+            return redirect("Enterprise:login")
         return redirect("Enterprise:dashboard")
 
 
@@ -94,6 +93,12 @@ class AreaAPI(ModelViewSet):
                                 template_name = 'Enterprise/list-areas.html')
         return response
     
+    def create(self, request, *args, **kwargs):
+        response = super(AreaAPI, self).create(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            return redirect('Enterprise:area-list')
+        return response
+
     def retrieve(self, request, *args, **kwargs):
         response = super(AreaAPI, self).retrieve(request, *args, **kwargs)
         if request.accepted_renderer.format == 'html':
@@ -138,18 +143,21 @@ class TechnicalAPI(ModelViewSet):
     permission_classes = [IsAuthenticated]  
     serializer_class = TechnicalSerializer
     queryset = Technical.objects.filter(employee__n_status=True)
+    renderer_classes = [JSONRenderer]
     lookup_field = 'id'
     
     def get_queryset(self):
-#         if 'ticket' in self.request.query_params:
-        busy_technicals = list(Ticket.objects.all().values("was_attended").distinct())
-        busy_technicals_temp = []
-        for busy_technical in busy_technicals:
-            if busy_technical not in busy_technicals_temp:
-                busy_technicals_temp.append(busy_technical)
-        print(busy_technicals_temp)
-#             free_technicals = Technical.objects.all().exclude()
-#         else:
-        return Technical.objects.filter(employee__n_status=True)
+        print(self.request.query_params)
+        if 'free_technical' in self.request.query_params:
+            busy_technicals = list(Ticket.objects.\
+                                   values_list("was_attended", flat=True).distinct())
+            id_service = self.request.query_params["service"]
+            free_technical = Technical.objects.\
+                                filter(employee__n_status=True, services__id=id_service).\
+                                exclude(employee__user__id__in=busy_technicals)
+            queryset = free_technical
+        else:
+            queryset = Technical.objects.filter(employee__n_status=True)
+        return queryset
             
 
