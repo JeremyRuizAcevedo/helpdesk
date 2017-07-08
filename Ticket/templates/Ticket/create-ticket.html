@@ -22,12 +22,19 @@
 											<div class="form-group">
 												<label for="focusedinput" class="col-sm-2 control-label">Solicitador por :</label>
 												<div class="row">
+													{% if perms.Enterprise.is_employee %}
+													<div class="col-sm-4">
+														<label for="focusedinput" class="col-sm-2 control-label">{{user.first_name}}{{user.last_name}}</label>
+														<input type="number" name="employee" hidden value="{{user.id}}">
+													</div>
+													{% else %}
 													<div class="col-sm-4">
 														<input type="number" class="form-control" id="focusedinput" name="employee" placeholder="Ingrese código de empleado">
 													</div>
 													<div class="col-sm-3">
 														<button><i class="fa fa-search"></i> Buscar</button>
 													</div>
+													{% endif %}
 												</div>
 											</div>
 											<div class="form-group">
@@ -69,6 +76,7 @@
 												<label for="txtarea1" class="col-sm-2 control-label">Descripción(*)</label>
 												<div class="col-sm-8"><textarea name="description" id="txtarea1" cols="50" rows="4" class="form-control"></textarea></div>
 											</div>
+											{% if perms.auth.is_admin %}
 											<div class="form-group">
 												<label for="selector1" class="col-sm-2 control-label">Prioridad :</label>
 												<div class="col-sm-6">
@@ -77,11 +85,12 @@
 													</select>
 												</div>
 											</div>
+											{% endif %}
 											<div class="form-group">
 												<label for="selector1" class="col-sm-2 control-label">Técnico asignado :</label>
 												<div class="col-sm-8" id="technical">
 												</div>
-												<input id="was_attended" ype="text" name="was_attended" hidden value="">
+												<input id="was_attended" type="text" name="was_attended" hidden value="">
 											</div>
 											<div class="panel-footer">
 												<div class="row">

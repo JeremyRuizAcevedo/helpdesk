@@ -66,7 +66,9 @@ class Dashbboard(APIView):
     template_name = 'Enterprise/dashboard.html'
 
     def get(self, request, *args, **kwargs):
-        return Response({})
+        if request.user.get_all_permissions() == {'Enterprise.is_employee'}:
+            return redirect("Ticket:ticket-list")
+        return Response({}, template_name = 'Enterprise/dashboard.html')
 
 
 class Logout(APIView):

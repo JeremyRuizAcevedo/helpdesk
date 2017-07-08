@@ -173,8 +173,8 @@
 										 class="img-responsive img-circle">
 									</div>
 									<div class="info">
-										<span class="username">Jonathan Smith</span>
-										<span class="useremail">jon@helpdesk.com</span>
+										<span class="username">{{user.first_name}} {{user.last_name}}</span>
+										<span class="useremail">{{user.email}}</span>
 									</div>
 								</div>
 							</div>
@@ -183,7 +183,10 @@
 							<nav role="navigation" class="widget-body">
 								<ul class="acc-menu">
 									<li class="nav-separator"><span>Explore</span></li>
-									<li><a href="{% url 'Enterprise:dashboard' %}"><i class="ti ti-home"></i><span>Dashboard</span><span class="badge badge-teal">2</span></a></li>
+									{% if perms.auth.is_admin %}
+									<li>
+										<a href="{% url 'Enterprise:dashboard' %}"><i class="ti ti-home"></i><span>Dashboard</span><span class="badge badge-teal">2</span></a>
+									</li>
 									<li>
 										<a href="javascript:;"><i class="fa fa-building-o"></i><span>Áreas</span></a>
 										<ul class="acc-menu">
@@ -198,6 +201,7 @@
 											<li><a href="{% url 'Enterprise:employee-list' %}">Listado de Empleados</a></li>
 										</ul>
 									</li>
+									{% endif %}
 									<li><a href="javascript:;"><i class="ti ti-ticket"></i><span>Ticket</span></a>
 										<ul class="acc-menu">
 											<li><a href="{% url 'Ticket:ticket-list' %}?create=''">Crear Ticket</a></li>
@@ -205,6 +209,7 @@
 										</ul>
 									</li>
 									<li><a href="index.html"><i class="ti ti-server"></i><span>Base de Conocimiento</span><span class="badge badge-teal">2</span></a></li>
+									{% if perms.auth.is_admin %}
 									<li>
 										<a href="javascript:;"><i class="ti ti-layout-accordion-merged"></i><span>Categorías</span></a>
 										<ul class="acc-menu">
@@ -219,6 +224,7 @@
 											<li><a href="{% url 'Service:service-list' %}">Listado de Servicios</a></li>
 										</ul>
 									</li>
+									{% endif %}
 								</ul>
 							</nav>
 						</div>
