@@ -41,6 +41,12 @@ class TicketAPI(ModelViewSet):
                                 template_name = 'Ticket/list-tickets.html')
         return response
 
+    def create(self, request, *args, **kwargs):
+        response = super(TicketAPI, self).create(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            return redirect('Ticket:ticket-list')
+        return response
+
     def retrieve(self, request, *args, **kwargs):
         response = super(TicketAPI, self).retrieve(request, *args, **kwargs)
         if request.accepted_renderer.format == 'html':

@@ -42,6 +42,9 @@ class EmployeeSerializer(ModelSerializer):
 
         if self.context['request'].method == 'GET':
             self.fields['area'] = AreaSerializer(read_only=True, context=kwargs['context'])
+            
+        if self.context['request'].method == 'GET' or self.context['request'].method == 'POST':
+            self.fields.pop("n_status")
 
     def create(self, validated_data):
         username = validated_data["user"]["username"]

@@ -30,6 +30,12 @@ class CategoryAPI(ModelViewSet):
                                 template_name = 'Service/list-categorys.html')
         return response
 
+    def create(self, request, *args, **kwargs):
+        response = super(CategoryAPI, self).create(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            return redirect('Service:category-list')
+        return response
+
     def retrieve(self, request, *args, **kwargs):
         response = super(CategoryAPI, self).retrieve(request, *args, **kwargs)
         if request.accepted_renderer.format == 'html':
@@ -70,7 +76,13 @@ class ServiceAPI(ModelViewSet):
             response = super(ServiceAPI, self).list(request, *args, **kwargs)
             return Response({'data': response.data},
                                 template_name = 'Service/list-services.html')
-    
+
+    def create(self, request, *args, **kwargs):
+        response = super(ServiceAPI, self).create(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            return redirect('Service:service-list')
+        return response
+
     def retrieve(self, request, *args, **kwargs):
         response = super(ServiceAPI, self).retrieve(request, *args, **kwargs)
         if request.accepted_renderer.format == 'html':

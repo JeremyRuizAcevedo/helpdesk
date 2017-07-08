@@ -29,6 +29,12 @@ class CategorySerializer(ModelSerializer):
                 list_services.append(dict_service)
             return list_services
 
+    def __init__(self, *args, **kwargs):
+        super(CategorySerializer, self).__init__(*args, **kwargs)
+
+        if self.context['request'].method == 'GET' or self.context['request'].method == 'POST':
+            self.fields.pop("n_status")
+
 
 class ServicePrioritySerializer(ModelSerializer):
 
@@ -51,3 +57,5 @@ class ServiceSerializer(ModelSerializer):
             self.fields['category'] = CategorySerializer(read_only=True, context=kwargs['context'])
             self.fields['priority'] = ServicePrioritySerializer(read_only=True, context=kwargs['context'])
 
+        if self.context['request'].method == 'GET' or self.context['request'].method == 'POST':
+            self.fields.pop("n_status")

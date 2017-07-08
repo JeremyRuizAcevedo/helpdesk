@@ -129,12 +129,18 @@ class EmployeeAPI(ModelViewSet):
                 return Response({'employees': response.data},
                                 template_name = 'Enterprise/list-employees.html')
         return response
-    
+
+    def create(self, request, *args, **kwargs):
+        response = super(EmployeeAPI, self).create(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            return redirect('Enterprise:employee-list')
+        return response
+
     def retrieve(self, request, *args, **kwargs):
         response = super(EmployeeAPI, self).retrieve(request, *args, **kwargs)
         if request.accepted_renderer.format == 'html':
             return Response({'employee': response.data},
-                            template_name = 'Service/edit-employee.html')
+                            template_name = 'Enterprise/edit-employee.html')
         return response
 
 
