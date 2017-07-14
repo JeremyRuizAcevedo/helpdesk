@@ -1,22 +1,18 @@
 {% extends 'Enterprise/base.html' %} {% block title %} Lista de Tickets {% endblock %} {% block content %}
 <style>
-	table,
-	th,
-	td {
-		text-align: center;
-	}
+  table,
+  th,
+  td {
+    text-align: center;
+  }
 </style>
 <div class="static-content">
   <div class="page-content">
-
     <div class="container-fluid">
-
       <div data-widget-group="group1">
-
         <div class="row">
           <div class="col-xs-12">
             <div class="form-group">
-
               <label for="desde" class="col-sm-1 control-label">Desde</label>
               <div class="col-sm-2">
                 <input type="date" class="form-control" id="desde">
@@ -38,7 +34,6 @@
             </div>
           </div>
         </div>
-
         <br>
         <div class="row">
           <div class="col-xs-12">
@@ -47,19 +42,19 @@
                 <h2>Consultar Tickets</h2>
               </div>
               <div class="panel-body">
-
                 <table class="table m-n">
                   <thead>
                     <tr>
                       <th>Número Ticket</th>
                       <th>Solicitante</th>
-                      <th>Fecha de Registro</th>
                       <th>Tipo de Problema</th>
                       <th>Asunto</th>
                       <th>Técnico Asignado</th>
+                      <th>Fecha de Registro</th>
+                      <th>Fecha Fin</th>
+                      <th>Tiempo restante</th>
                       <th>Estado</th>
-											<th>Detalle</th>
-											<th>Eliminar</th>
+                      <th>Detalle</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -67,17 +62,42 @@
                     <tr class="odd gradeX">
                       <td style="width:5%">{{ticket.number}}</td>
                       <td>{{ticket.employee.user.first_name}} {{ticket.employee.user.last_name}}</td>
-                      <td style="width:10%">{{ticket.date}}</td>
                       <td>{{ticket.service_type.name}}</td>
                       <td>{{ticket.subject}}</td>
                       <td>{{ticket.was_attended.employee.user.name}}</td>
-                      {% if ticket.status %}
-                      <td bgcolor="#B0E8AD" font="white">ATENDIDO</td>
-                      {% else %}
-                      <td bgcolor="#FF6161" font="white">SIN ATENDER</td>
+                      <td style="width:10%">{{ticket.date}}</td>
+                      <td style="width:10%">{{ticket.status_time.date_end}}</td>
+                      <td style="width:10%" id="{{ticket.status_time.time}}" class="timer"></td>
+                      {% if ticket.status == 1 %}
+                      <td>
+                        <button type="button" class="btn btn-success btn-lg ticket-status" data-id-ticket="{{ticket.id}}" style="width: 100%; display: inline-block"
+                          data-toggle="modal" data-target="#myModal2">ATENDIDO</button>
+                      </td>
+                      {% elif ticket.status == 2 %}
+                      <td>
+                        <button type="button" class="btn btn-primary btn-lg ticket-status" data-id-ticket="{{ticket.id}}" style="width: 100%; display: inline-block"
+                          data-toggle="modal" data-target="#myModal2">EN PROCESO</button>
+                      </td>
+                      {% elif ticket.status == 0 %}
+                      <td>
+                        <button type="button" class="btn btn-default btn-lg ticket-status" data-id-ticket="{{ticket.id}}" style="width: 100%; display: inline-block"
+                          data-toggle="modal" data-target="#myModal2">SIN ATENDER</button>
+                      </td>
+                      {% elif ticket.status == 3 %}
+                      <td>
+                        <button type="button" class="btn btn-warning btn-lg ticket-status" data-id-ticket="{{ticket.id}}" style="width: 100%; display: inline-block"
+                          data-toggle="modal" data-target="#myModal2">POR VENCER</button>
+                      </td>
+                      {% elif ticket.status == 4 %}
+                      <td>
+                        <button type="button" class="btn btn-danger btn-lg ticket-status" data-id-ticket="{{ticket.id}}" style="width: 100%; display: inline-block"
+                          data-toggle="modal" data-target="#myModal2">EXCEDIDO</button>
+                      </td>
                       {% endif %}
-                      <td style="width:5%"><a href="{% url 'Ticket:ticket-detail' id=ticket.id %}"><i class="ti ti-zoom-in"></i></a></td>
-                      <td style="width:5%"><a href="#"><i class="ti ti-trash"></i></a></td>
+                      <td style="width:5%"><button type="button" class="btn btn-primary btn-lg ticket-detail" id="{{ticket.id}}" data-toggle="modal"
+                          data-target="#myModal">
+								      <i class="ti ti-zoom-in"></i></button>
+                      </td>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -85,12 +105,178 @@
               </div>
             </div>
           </div>
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">Detalle Ticket</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">
+                      <form class="form-horizontal">
+                        <div class="row">
+                          <div class="form-group">
+                            <label for="fechaticket" class="col-sm-2 control-label">Numero del ticket</label>
+                            <div class="col-sm-2">
+                              <input disabled type="text" class="form-control" id="ticket-number" value="">
+                            </div>
+                            <label for="selector1" class="col-sm-2 control-label">Tipo de Problema</label>
+                            <div class="col-sm-3">
+                              <input disabled type="text" class="form-control" id="ticket-service-type" value="">
+                              <!--<select name="selector1" id="selector1" class="form-control">
+                              <option>Falla de Impresora</option>
+                              <option>Internet</option>
+                              <option>Virus y Malware</option>
+                              <option>Otros</option>
+                            </select>-->
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="fechaticket" class="col-sm-2 control-label">Solicitante</label>
+                          <div class="col-sm-8">
+                            <input disabled type="text" class="form-control" id="ticket-employee" value="">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="fechaticket" class="col-sm-2 control-label">Area</label>
+                          <div class="col-sm-8">
+                            <input disabled type="text" class="form-control" id="employee-area" value="">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="selector1" class="col-sm-2 control-label">Técnico Asignado</label>
+                          <div class="col-sm-8">
+                            <input disabled type="text" class="form-control" id="ticket-was-attended" value="">
+                            <!--<select name="selector1" id="selector1" class="form-control">
+                              <option>Luis Huertas</option>
+                              <option>Kevin Alarcon</option>
+                              <option>Carolina Cáceda</option>
+                            </select>-->
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="fechaticket" class="col-sm-2 control-label">Servicio</label>
+                          <div class="col-sm-8">
+                            <input disabled type="text" class="form-control" id="ticket-service">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="fechaticket" class="col-sm-2 control-label">Tiempo Estimado</label>
+                          <div class="col-sm-8">
+                            <input type="number" class="form-control" id="ticket-ans">
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">Estado del Ticket</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="horizontal-form">
+                      <div class="radio">
+                        <label><input class="radio-opt" type="radio" name="optradio" value="2">Atender</label>
+                      </div>
+                      <div class="radio">
+                        <label><input class="radio-opt" type="radio" name="optradio" value="1">Dar Solución</label>
+                      </div>
+                      <div class="radio">
+                        <label><input class="radio-opt" type="radio" name="optradio" value="0">Reabrir</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button id="update-status" type="button" class="btn btn-primary">Aceptar</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
       </div>
     </div>
-
   </div>
-  <!-- .container-fluid -->
 </div>
+{% endblock %} {% block js %}
+<script>
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  $(".ticket-detail").click(function () {
+    id_ticket = $(this).attr("id");
+    $.get("/ticket/tickets/" + id_ticket + "/", function (data) {
+      $("#ticket-number").val(data.number);
+      $("#ticket-employee").val(data.employee.user.name);
+      $("#employee-area").val(data.employee.area.name);
+      $("#ticket-was-attended").val(data.was_attended.employee.user.name);
+      $("#ticket-service-type").val(data.service_type.name);
+      $("#ticket-service").val(data.service.name);
+      $("#ticket-ans").val(data.service.ans);
+    });
+  });
+  var id_ticket_status;
+  $(".ticket-status").click(function () {
+    id_ticket_status = $(this).data("id-ticket");
+  });
+  var status;
+  $(".radio-opt").click(function () {
+    status = $(this).val();
+  });
+  $("#update-status").click(function () {
+    var csrftoken = getCookie('csrftoken');
+    $.ajax({
+      url: '/ticket/tickets/' + id_ticket_status + '/',
+      type: 'PATCH',
+      headers: { 'X-CSRFToken': csrftoken },
+      data: { "status": status },
+      dataType: "application/json",
+      success: function (data) {
+      }
+    });
+    $('#myModal2').modal('hide')
+    location.href = "{% url 'Ticket:ticket-list' %}";
+  });
+  var i = 0;
+  var myVar = setInterval(function () {
+    $(".timer").each(function () {
+      var time = $(this).attr("id");
+      var timeTmp = Number(time);
+      var hours = parseInt(timeTmp / 3600);
+      var minutes = parseInt((timeTmp % 3600) / 60);
+      var seconds = parseInt(timeTmp % 60) + i;
+      timeTmp = hours.toString() + ":" + minutes.toString() + ":" + seconds.toString();
+      document.getElementById(time).innerHTML = timeTmp;
+    });
+    i = i + 1;
+  }, 1000);
+
+</script>
+
 {% endblock %}

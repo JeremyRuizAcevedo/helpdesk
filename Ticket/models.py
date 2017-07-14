@@ -2,6 +2,7 @@ from django.db import models
 from Enterprise.models import Employee, Technical
 from random import randrange
 from Service.models import Service
+from django.utils import timezone
 
 # Create your models here.
 class ServiceType(models.Model):
@@ -16,8 +17,8 @@ class Ticket(models.Model):
     number = models.IntegerField(default=randrange(100, 999, 7))
     subject = models.CharField(max_length=50)
     description = models.TextField()
-    date = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=False)
+    date = models.DateTimeField(default=timezone.now)
+    status = models.IntegerField(default=0)
     solution = models.TextField(default="")
     employee = models.ForeignKey(Employee,null=True, blank=True)
     service = models.ForeignKey(Service, null=True, blank=True)

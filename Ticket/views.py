@@ -10,17 +10,19 @@ from Ticket.serializers import TicketSerializer, ServiceTypeSerializer
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.urls import template_name
 from rest_framework.response import Response
-from Enterprise.models import Technical
+from Enterprise.models import Technical, Employee
 from Enterprise.serializers import TechnicalSerializer
 from Service.models import Category
 from Service.serializers import CategorySerializer
+from django.core.mail import send_mail
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 # Create your views here.
 class TicketAPI(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = TicketSerializer
-    queryset = Ticket.objects.all()
     renderer_classes = [JSONRenderer, TemplateHTMLRenderer]
     template_name = 'Ticket/list-tickets.html'
     lookup_field = 'id'
@@ -41,8 +43,36 @@ class TicketAPI(ModelViewSet):
                                 template_name = 'Ticket/list-tickets.html')
         return response
 
+    def get_queryset(self):
+        if self.request.user.is_authenticated() and not self.request.user.has_perm("auth.is_admin"):
+            queryset = Ticket.objects.filter(employee=self.request.user.employee)
+        else:
+             queryset = Ticket.objects.all()
+        return queryset
+
     def create(self, request, *args, **kwargs):
         response = super(TicketAPI, self).create(request, *args, **kwargs)
+        print(request.data)
+        id_employee = request.data["employee"]
+        id_technical = request.data["was_attended"]
+        employee = Employee.objects.filter(id=id_employee).last()
+        ticket = Ticket.objects.filter(employee=employee).order_by('date').last()
+        technical = Technical.objects.filter(id=id_technical).last()
+        send_mail(
+            "Nueva ticket registrado",
+            "Usted ha registrado un ticket con éxito. El número de su ticket es: " +
+            str(ticket.number)+"Le atenderemos en la brevedad posible. Ingrese a http://localhost:8000",
+            settings.EMAIL_HOST_USER,
+            [employee.user.email],
+            fail_silently=False,
+        )
+        send_mail(
+            "Nuevo ticket registrado",
+            "Usted tiene un nuevo ticket a resolver. Ingrese a http://localhost:8000",
+            settings.EMAIL_HOST_USER,
+            [technical.employee.user.email],
+            fail_silently=False,
+        )
         if request.accepted_renderer.format == 'html':
             return redirect('Ticket:ticket-list')
         return response

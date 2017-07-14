@@ -48,14 +48,6 @@
 
 			<a class="" href="{% url 'Enterprise:dashboard' %}" style="font-size: 150%; color: white">MESA DE AYUDA</a>
 
-			<div class="toolbar-icon-bg hidden-xs" id="toolbar-search">
-				<div class="input-group">
-					<span class="input-group-btn"><button class="btn" type="button"><i class="ti ti-search"></i></button></span>
-					<input type="text" class="form-control" placeholder="Search...">
-					<span class="input-group-btn"><button class="btn" type="button"><i class="ti ti-close"></i></button></span>
-				</div>
-			</div>
-
 		</div>
 		<!-- logo-area -->
 
@@ -183,10 +175,13 @@
 							<nav role="navigation" class="widget-body">
 								<ul class="acc-menu">
 									<li class="nav-separator"><span>Explore</span></li>
-									{% if perms.auth.is_admin %}
+									{% if perms.auth %}
+									{% if perms.auth.is_admin or perms.auth.is_technical %}
 									<li>
-										<a href="{% url 'Enterprise:dashboard' %}"><i class="ti ti-home"></i><span>Dashboard</span><span class="badge badge-teal">2</span></a>
+										<a href="{% url 'Enterprise:dashboard' %}"><i class="ti ti-home"></i><span>Dashboard</span></a>
 									</li>
+									{% endif %}
+									{% if perms.auth.is_admin %}
 									<li>
 										<a href="javascript:;"><i class="fa fa-building-o"></i><span>Áreas</span></a>
 										<ul class="acc-menu">
@@ -202,13 +197,14 @@
 										</ul>
 									</li>
 									{% endif %}
+									{% endif %}
 									<li><a href="javascript:;"><i class="ti ti-ticket"></i><span>Ticket</span></a>
 										<ul class="acc-menu">
 											<li><a href="{% url 'Ticket:ticket-list' %}?create=''">Crear Ticket</a></li>
 											<li><a href="{% url 'Ticket:ticket-list' %}">Listado de Tickets</a></li>
 										</ul>
 									</li>
-									<li><a href="index.html"><i class="ti ti-server"></i><span>Base de Conocimiento</span><span class="badge badge-teal">2</span></a></li>
+									<li><a href="index.html"><i class="ti ti-server"></i><span>Base de Conocimiento</span></a></li>
 									{% if perms.auth.is_admin %}
 									<li>
 										<a href="javascript:;"><i class="ti ti-layout-accordion-merged"></i><span>Categorías</span></a>

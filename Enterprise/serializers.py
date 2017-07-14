@@ -62,7 +62,7 @@ class EmployeeSerializer(ModelSerializer):
         employee = Employee.objects.create(user=user, dni=dni, phone=phone,area=area)
         send_mail(
                 "Nueva cuenta de empleado",
-                "Ustede ha sido registrado con exito y forma parte del sistema\
+                "Usted ha sido registrado con exito y forma parte del sistema\
                 de mesa de ayuda. Esta es su contraseña: "+ password + ". Se le \
                 sugiere cambiarla e iniciar sesion",
                 settings.EMAIL_HOST_USER,

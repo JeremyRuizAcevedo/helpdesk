@@ -1,0 +1,257 @@
+{% extends 'Enterprise/base.html' %} {% block title %} Lista de Tickets {% endblock %} {% block content %}
+<style>
+	table,
+	th,
+	td {
+		text-align: center;
+	}
+</style>
+<div class="static-content">
+	<div class="page-content">
+
+		<div class="container-fluid">
+
+			<div data-widget-group="group1">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+
+							<label for="desde" class="col-sm-1 control-label">Desde</label>
+							<div class="col-sm-2">
+								<input type="date" class="form-control" id="desde">
+							</div>
+							<label for="hasta" class="col-sm-1 control-label">Hasta</label>
+							<div class="col-sm-2">
+								<input type="date" class="form-control" id="hasta">
+							</div>
+							<div class="col-sm-2">
+							</div>
+							<div class="form-group">
+								<label for="selector1" class="col-sm-1 control-label">Estado</label>
+								<div class="col-sm-3"><select name="selector1" id="selector1" class="form-control">
+							<option>Sin Atender</option>
+							<option>En proceso</option>
+							<option>Atendidos</option>
+							<option>Excedidos</option>
+							<option>Todos</option>
+					</select></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<br>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="panel panel-midnightblue">
+							<div class="panel-heading">
+								<h2>Consultar Tickets</h2>
+							</div>
+							<div class="panel-body">
+
+								<table class="table m-n">
+									<thead>
+										<tr>
+											<th>Código</th>
+											<th>Solicitante</th>
+											<th>Área</th>
+											<th>Técnico Asignado</th>
+											<th>Fecha de Incidencia</th>
+											<th>Tipo de Incidencia</th>
+											<th>Observaciones del Usuario</th>
+											<th>Observaciones del Técnico</th>
+											<th>Estado</th>
+											<th>Tiempo Estimado</th>
+											<th>Tiempo Restante</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1000-001</td>
+											<td>Nelson Jaimes</td>
+											<td>Inversiones</td>
+											<td></td>
+											<td>20/06/2017 05:40:23</td>
+											<td>Sin Acceso a Internet</td>
+											<td>La conectividad estaba limitada o nula</td>
+											<td></td>
+											<td bgcolor="#BDBDBD" font="white">SIN ATENDER</td>
+											<td>4:00:00</td>
+											<td>4:00:00</td>
+											<td><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+								<i class="ti ti-pencil">
+								</button></td>
+
+										</tr>
+										<tr>
+											<td>1000-001</td>
+											<td>Nelson Jaimes</td>
+											<td>Inversiones</td>
+											<td></td>
+											<td>20/06/2017 05:40:23</td>
+											<td>Sin Acceso a Internet</td>
+											<td>La conectividad estaba limitada o nula</td>
+											<td></td>
+											<td bgcolor="#BDBDBD" font="white">SIN ATENDER</td>
+											<td>4:00:00</td>
+											<td>4:00:00</td>
+											<td><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+								<i class="ti ti-pencil">
+								</button></td>
+										</tr>
+										<tr>
+											<td>1090-081</td>
+											<td>Carolina Cáceda</td>
+											<td>Auditoria</td>
+											<td>Luis Huertas</td>
+											<td>17/06/2017 08:14:53</td>
+											<td>Falla de Impresora</td>
+											<td>La impresora no imprime nada a pesar de haber cancelado los procesos</td>
+											<td></td>
+											<td bgcolor="#FE9A2E" font="white">EN PROCESO</td>
+											<td>3:00:00</td>
+											<td>1:23:45</td>
+											<td><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+								<i class="ti ti-pencil">
+								</button></td>
+										</tr>
+										<tr>
+											<td>1390-052</td>
+											<td>Karina Mondalgo</td>
+											<td>Contabilidad</td>
+											<td>Kevin Alarcon</td>
+											<td>04/06/2017 15:45:37</td>
+											<td>Falla de Impresora</td>
+											<td>La computadora no reconoce a la impresora a pesar de tener instalado el software</td>
+											<td>El cable de la impresora estaba dañado</td>
+											<td bgcolor="#B0E8AD" font="white">ATENDIDO</td>
+											<td>4:00:00</td>
+											<td>0:00:00</td>
+											<td><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+								<i class="ti ti-pencil">
+								</button></td>
+										</tr>
+										<tr>
+											<td>1532-064</td>
+											<td>Nelson Jaimes</td>
+											<td>Inversiones</td>
+											<td>Kevin Alarcon</td>
+											<td>01/06/2017 08:14:53</td>
+											<td>Virus y Malware</td>
+											<td>La computadora esta mas lenta que antes desde instalar cierto programa</td>
+											<td>La computadora necesitaba ser desfragmentada</td>
+											<td bgcolor="#B0E8AD" font="white">ATENDIDO</td>
+											<td>8:00:00</td>
+											<td>0:00:00</td>
+											<td><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+								<i class="ti ti-pencil">
+								</button></td>
+										</tr>
+										<tr>
+											<td>1742-053</td>
+											<td>Karina Mondalgo</td>
+											<td>Contabilidad</td>
+											<td>Jeremy Ruiz</td>
+											<td>25/05/2017 08:14:53</td>
+											<td>Problemas con la cuenta</td>
+											<td>No puedo acceder al sistema con mi usuario y contraseña</td>
+											<td></td>
+											<td bgcolor="#F95353" font="white">EXCEDIDO</td>
+											<td>5:00:00</td>
+											<td>0:00:00</td>
+											<td><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+								<i class="ti ti-pencil">
+								</button></td>
+										</tr>
+									</tbody>
+								</table>
+
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="myModalLabel">Modificar Ticket</h4>
+								</div>
+								<div class="modal-body">
+									<div class="tab-content">
+										<div class="tab-pane active" id="horizontal-form">
+											<form class="form-horizontal">
+
+												<div class="form-group">
+													<label for="fechaticket" class="col-sm-2 control-label">Numero del ticket</label>
+													<div class="col-sm-8">
+														<input disabled type="text" class="form-control" id="fechaticket" value="N00-001">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label for="fechaticket" class="col-sm-2 control-label">Solicitante</label>
+													<div class="col-sm-8">
+														<input disabled type="text" class="form-control" id="fechaticket" value="Nelson Jaimes">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label for="fechaticket" class="col-sm-2 control-label">Area</label>
+													<div class="col-sm-8">
+														<input disabled type="text" class="form-control" id="fechaticket" value="Inversiones">
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label for="selector1" class="col-sm-2 control-label">Técnico Asignado</label>
+													<div class="col-sm-8"><select name="selector1" id="selector1" class="form-control">
+											<option>Luis Huertas</option>
+											<option>Kevin Alarcon</option>
+											<option>Carolina Cáceda</option>
+									</select></div>
+												</div>
+												<div class="form-group">
+													<label for="selector1" class="col-sm-2 control-label">Tipo de Problema</label>
+													<div class="col-sm-8"><select name="selector1" id="selector1" class="form-control">
+											<option>Falla de Impresora</option>
+											<option>Internet</option>
+											<option>Virus y Malware</option>
+											<option>Otros</option>
+									</select></div>
+												</div>
+												<div class="form-group">
+													<label for="fechaticket" class="col-sm-2 control-label">Tiempo Estimado</label>
+													<div class="col-sm-8">
+														<input type="number" class="form-control" id="fechaticket" value="4" min="1">
+													</div>
+												</div>
+
+											</form>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+									<button type="button" class="btn btn-primary">Guardar Cambios</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+				</div>
+			</div>
+
+		</div>
+		<!-- .container-fluid -->
+	</div>
+	<!-- #page-content -->
+</div>
+{% endblock %}

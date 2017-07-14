@@ -22,7 +22,7 @@
 											<div class="form-group">
 												<label for="focusedinput" class="col-sm-2 control-label">Solicitador por :</label>
 												<div class="row">
-													{% if perms.Enterprise.is_employee %}
+													{% if not perms.auth.is_admin %}
 													<div class="col-sm-4">
 														<label for="focusedinput" class="col-sm-2 control-label">{{user.first_name}}{{user.last_name}}</label>
 														<input type="number" name="employee" hidden value="{{user.id}}">
