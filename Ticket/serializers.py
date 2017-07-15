@@ -44,17 +44,20 @@ class TicketSerializer(ModelSerializer):
         date_end = obj.date + timedelta(seconds=obj.service.ans * 60)
         date_end_format = datetime.strftime(date_end, "%d-%m-%Y %H:%M")
         if date_end > timezone.now():
+            status_time = "timeleft"
             time = date_end - timezone.now()
             if (time.total_seconds() / 60) < 0.3 * obj.service.ans:
                 if obj.status != 1 and obj.status != 2:
                     obj.status = 3
                     obj.save()
         else:
+            status_time = "timeout"
             time = timezone.now() - date_end
             if obj.status != 1 and obj.status != 2:
                 obj.status = 4
                 obj.save()
-        return {"time": time.total_seconds(), "date_end": date_end_format}
+        return {"time": time.total_seconds(), "date_end": date_end_format,
+                "status_time": status_time}
 #     def to_representation(self, obj):
 #         """Move fields from profile to user representation."""
 #         rep = super().to_representation(obj)
