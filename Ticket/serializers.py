@@ -67,7 +67,7 @@ class TicketSerializer(ModelSerializer):
                     "Pongase en contacto con el tecnico para dar solucion a esta" +
                     "situacion. Ingrese a http://localhost:8000",
                     settings.EMAIL_HOST_USER,
-                    [obj.was_attended.boss.employee.user.email],
+                    [obj.was_attended.boss.user.email],
                     fail_silently=False,
                 )
         return {"time": time.total_seconds(), "date_end": date_end_format,

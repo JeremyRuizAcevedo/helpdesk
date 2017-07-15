@@ -1,27 +1,46 @@
-{% extends 'Enterprise/base.html' %} {% block title %} Nuevo Empleado {% endblock %} {% block content %}
-<input type="text" id="id_input">
-{% endblock %} {% block js %}
+<!doctype html>
+<html lang="en">
 
-<script>
-jQuery(function() {
-    $("#id_input").on('keyup', function(){
-        var value = $(this).val();
-        $.ajax({
-            url: "{% url 'Enterprise:autocomplete' %}",
-            data: {
-              'search': value 
-            },
-            dataType: 'json',
-            success: function (data) {
-                list = data.list;
-                $("#id_input").autocomplete({
-                source: list,
-                minLength: 1 
-                });       
-            }
-        });        
-    });
-  });
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery UI Autocomplete - Default functionality</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        jQuery(function () {
+            $("#id_input").on('keyup', function () {
+                var value = $(this).val();
+                $.ajax({
+                    url: "{% url 'Enterprise:autocomplete' %}",
+                    data: {
+                        'search': value
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        list = data.list;
+                        $("#id_input").autocomplete({
+                            source: list,
+                            minLength: 1
+                        });
+                    }
+                });
+            });
+        });
 
-</script>
-{% endblock %}
+    </script>
+</head>
+
+<body>
+
+    <div class="ui-widget">
+        <label for="id_input">Empleados: </label>
+        <input id="id_input">
+    </div>
+
+
+</body>
+
+</html>

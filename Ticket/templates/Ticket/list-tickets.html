@@ -252,7 +252,11 @@
     status = $(this).val();
   });
   $("#update-status").click(function () {
+
+    console.log(valRadio)
+    console.log($("#solution").val())
     var csrftoken = getCookie('csrftoken');
+
     $.ajax({
       url: '/ticket/tickets/' + id_ticket_status + '/',
       type: 'PATCH',
@@ -290,7 +294,7 @@
         var time = dateEnd.split(" ")[1]
         var timeHour = time.split(":")[0]
         var timeMinute = time.split(":")[1]
-        var timeSecond = (Number(time.split(":")[2]) + i).toString()
+        var timeSecond = (Number(time.split(":")[2]) - i).toString()
         var hoy = new Date(dateYear, dateMonth, dateDay, timeHour, timeMinute, timeSecond)
         var dias = 0
         var horas = 0
@@ -298,6 +302,7 @@
         var segundos = 0
         if (ticketStatus != "1") {
           if (fecha > hoy && statusTime == "timeleft") {
+            console.log("aqui2")
             var diferencia = (fecha.getTime() - hoy.getTime()) / 1000
             dias = Math.floor(diferencia / 86400)
             diferencia = diferencia - (86400 * dias)
@@ -328,15 +333,17 @@
     }, 1000);
   }
   getTime();
-
-  function giveSolution(valRadio) {
+var valRadio;
+  function giveSolution(val) {
+    var valRadio = val;
     if (valRadio == 1) {
-      $("#solution").html('<br><br><label for="txtarea1" class="col-sm-2 control-label">Solución</label><br><div class="col-sm-12"><textarea name="solution" id="txtarea1" cols="50" rows="5" class="form-control"></textarea></div><br><br>');
+      $("#solution").html('<br><br><label for="txtarea1" class="col-sm-2 control-label">Solución</label><br><div class="col-sm-12"><textarea name="solution" id="solution" cols="50" rows="5" class="form-control"></textarea></div><br><br>');
     }
     else {
       $("#solution").html("")
     }
   }
+  
 
 </script>
 

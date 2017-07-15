@@ -21,4 +21,6 @@ urlpatterns = [
         name='category-detail'),
     url(r'^service-prioritys/$',
         views.ServicePriorityAPI.as_view({'get': 'list'}), name='service-priority-list'),
+    url(r'^faq/$',
+        views.FAQAPI.as_view({'get': 'list'}), name='faq-list'),
 ]

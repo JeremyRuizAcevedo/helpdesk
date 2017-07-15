@@ -7,7 +7,10 @@
 	<title>
 		{% block title %} {% endblock %}
 	</title>
-
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
@@ -204,7 +207,7 @@
 											<li><a href="{% url 'Ticket:ticket-list' %}">Listado de Tickets</a></li>
 										</ul>
 									</li>
-									<li><a href="index.html"><i class="ti ti-server"></i><span>Base de Conocimiento</span></a></li>
+									<li><a href="{% url 'Service:faq-list' %}"><i class="ti ti-server"></i><span>Base de Conocimiento</span></a></li>
 									{% if perms.auth.is_admin %}
 									<li>
 										<a href="javascript:;"><i class="ti ti-layout-accordion-merged"></i><span>Categorías</span></a>

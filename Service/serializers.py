@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from Service.models import Service, Category, ServicePriority
+from Service.models import Service, Category, ServicePriority, FAQ
 from rest_framework.relations import StringRelatedField, PrimaryKeyRelatedField
 from rest_framework.fields import SerializerMethodField
 from rest_framework.renderers import JSONRenderer
@@ -59,3 +59,10 @@ class ServiceSerializer(ModelSerializer):
 
         if self.context['request'].method == 'GET' or self.context['request'].method == 'POST':
             self.fields.pop("n_status")
+
+
+class FAQSerializer(ModelSerializer):
+
+    class Meta:
+        model = FAQ
+        fields = '__all__'

@@ -3,9 +3,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import SessionAuthentication,\
     BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from Service.models import Service, Category, ServicePriority
+from Service.models import Service, Category, ServicePriority, FAQ
 from Service.serializers import ServiceSerializer, CategorySerializer,\
-    ServicePrioritySerializer
+    ServicePrioritySerializer, FAQSerializer
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 
@@ -92,3 +92,17 @@ class ServiceAPI(ModelViewSet):
             else:
                 return redirect('Service:service-list')
         return response
+
+
+class FAQAPI(ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = FAQ.objects.all()
+    serializer_class = FAQSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'Service/faq.html'
+    lookup_field = 'id'
+
+    def list(self, request, *args, **kwargs):
+        response = super(FAQAPI, self).list(request, *args, **kwargs)
+        return Response({})

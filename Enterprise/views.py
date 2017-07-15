@@ -172,9 +172,11 @@ class TechnicalAPI(ModelViewSet):
 def autocomplete(request):
     if request.is_ajax():
         queryset = Employee.objects.filter(user__username__startswith=request.GET.get('search', None))
-        list = []        
+        list = []
+        dict = {}        
         for i in queryset:
-            list.append(i.user.username)
+            dict = {"id": i.id, "name": "employee", "value": i.user.username}
+            list.append(dict)
         data = {
             'list': list,
         }

@@ -19,21 +19,19 @@
 									<div class="tab-pane active" id="horizontal-form">
 										<form class="form-horizontal" method="POST">
 											{% csrf_token %}
-											<div class="form-group">
-												<label for="focusedinput" class="col-sm-2 control-label">Solicitador por :</label>
+											<div class="form-group ui-widget">
+												<label for="employees" class="col-sm-2 control-label">Solicitado por :</label>
 												<div class="row">
-													{% if not perms.auth.is_admin %}
+													{% if not perms.auth.is_admin and not perms.auth.is_technical %}
 													<div class="col-sm-4">
 														<label for="focusedinput" class="col-sm-2 control-label">{{user.first_name}}{{user.last_name}}</label>
 														<input type="number" name="employee" hidden value="{{user.id}}">
 													</div>
 													{% else %}
-													<div class="col-sm-4">
-														<input type="number" class="form-control" id="focusedinput" name="employee" placeholder="Ingrese código de empleado">
+													<div class="col-sm-6">
+														<span><button><i class="fa fa-search"></i></button><input type="text" class="form-control" id="employees" name="employee" value="" placeholder="Ingrese nombre del empleado"></span>
 													</div>
-													<div class="col-sm-3">
-														<button><i class="fa fa-search"></i> Buscar</button>
-													</div>
+
 													{% endif %}
 												</div>
 											</div>
@@ -114,15 +112,6 @@
 {% endblock %} {% block js %}
 <script type="text/javascript" src="assets/plugins/summernote/dist/summernote.js"></script>
 <script>
-	// $(document).ready(function () {
-	// 	$('.summernote').summernote({
-	// 		height: 200
-	// 	});
-	// 	$('.airmode').summernote({
-	// 		airMode: true
-	// 	});
-	// });
-
 	$("#category").change(function () {
 		var id_category = $("#category").val();
 		$.get("/service/categorys/" + id_category + "/", { "category_services": "" }, function (data) {
@@ -153,6 +142,40 @@
 			}
 			$("#technical").html(html);
 		});
+	});
+	jQuery(function () {
+		$("#employees").on('keyup', function () {
+			var value = $(this).val();
+			$.ajax({
+				url: "{% url 'Enterprise:autocomplete' %}",
+				data: {
+					'search': value
+				},
+				dataType: 'json',
+				success: function (data) {
+					$("#employees").autocomplete({
+						source: function (request, response) {
+							var list = [];
+							list = data.list;
+							response(list);
+							return;
+						},
+						select: function (e, ui) {
+							console.log(ui.item.id)
+							$("#employees").val(ui.item.id);
+						},
+
+						change: function (e, ui) {
+							$("#employees").val(ui.item.id);
+
+						}
+					});
+				}
+			});
+		});
+	});
+	$(".ui-cornerr-all").click(function () {
+		console.log($(this).attr("id"));
 	});
 
 </script>
