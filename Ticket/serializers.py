@@ -8,8 +8,9 @@ from rest_framework.settings import api_settings
 from datetime import datetime, timedelta
 from django.utils import timezone
 
+
 class ServiceTypeSerializer(ModelSerializer):
-    
+
     class Meta:
         model = ServiceType
         fields = '__all__'
@@ -35,16 +36,16 @@ class TicketSerializer(ModelSerializer):
             self.fields['was_attended'] = TechnicalSerializer(read_only=True,
                                                               context=kwargs['context'])
             self.fields['service_type'] = ServiceTypeSerializer(read_only=True,
-                                                         context=kwargs['context'])
+                                                                context=kwargs['context'])
             self.fields['service'] = ServiceSerializer(read_only=True,
-                                                         context=kwargs['context'])
+                                                       context=kwargs['context'])
 
     def get_status_time(self, obj):
-        date_end = obj.date + timedelta(seconds=obj.service.ans*60)
+        date_end = obj.date + timedelta(seconds=obj.service.ans * 60)
         date_end_format = datetime.strftime(date_end, "%d-%m-%Y %H:%M")
         if date_end > timezone.now():
             time = date_end - timezone.now()
-            if (time.total_seconds() / 60) < 0.3*obj.service.ans:
+            if (time.total_seconds() / 60) < 0.3 * obj.service.ans:
                 if obj.status != 1 and obj.status != 2:
                     obj.status = 3
                     obj.save()
@@ -66,4 +67,4 @@ class ActivitySerializer(ModelSerializer):
 
     class Meta:
         model = Activity
-        fields= '__all__'
+        fields = '__all__'

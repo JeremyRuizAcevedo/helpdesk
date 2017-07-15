@@ -5,10 +5,12 @@ from Service.models import Service
 from django.utils import timezone
 
 # Create your models here.
+
+
 class ServiceType(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
-    
+
     def __str__(self):
         return self.name
 
@@ -20,11 +22,11 @@ class Ticket(models.Model):
     date = models.DateTimeField(default=timezone.now)
     status = models.IntegerField(default=0)
     solution = models.TextField(default="")
-    employee = models.ForeignKey(Employee,null=True, blank=True)
+    employee = models.ForeignKey(Employee, null=True, blank=True)
     service = models.ForeignKey(Service, null=True, blank=True)
     service_type = models.ForeignKey(ServiceType)
     was_attended = models.ForeignKey(Technical, null=True, blank=True)
-     
+
     def __str__(self):
         return str(self.number) + " - " + self.subject
 
@@ -34,6 +36,6 @@ class Activity(models.Model):
     description = models.TextField()
     ticket = models.ForeignKey(Ticket, null=True, blank=True)
     is_solution = models.BooleanField(default=False)
-    
+
     def __str__(self):
         return self.description

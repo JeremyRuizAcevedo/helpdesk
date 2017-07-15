@@ -1,7 +1,6 @@
 *.pyc
 __pycache__
 venvhd
-db.sqlite3
 .DS_Store
 .project
 .pydevproject

@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'^tickets/(?P<id>[0-9]+)/$',
         views.TicketAPI.as_view(
             {'get': 'retrieve', 'put': 'update', 'patch': 'partial_update'}
-            ),
+        ),
         name='ticket-detail'),
 ]

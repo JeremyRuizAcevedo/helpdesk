@@ -19,6 +19,8 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 
 # Create your views here.
+
+
 class TicketAPI(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
@@ -32,22 +34,25 @@ class TicketAPI(ModelViewSet):
         if request.accepted_renderer.format == 'html':
             if 'create' in request.query_params:
                 services_types = ServiceType.objects.all()
-                services_type = ServiceTypeSerializer(services_types, many=True)
+                services_type = ServiceTypeSerializer(
+                    services_types, many=True)
                 categorys = Category.objects.all()
-                category = CategorySerializer(categorys, many=True, context={'request': request})
+                category = CategorySerializer(
+                    categorys, many=True, context={'request': request})
                 return Response({'service_types': services_type.data,
                                  'categorys': category.data},
-                                template_name = 'Ticket/create-ticket.html')
+                                template_name='Ticket/create-ticket.html')
             else:
                 return Response({'tickets': response.data},
-                                template_name = 'Ticket/list-tickets.html')
+                                template_name='Ticket/list-tickets.html')
         return response
 
     def get_queryset(self):
         if self.request.user.is_authenticated() and not self.request.user.has_perm("auth.is_admin"):
-            queryset = Ticket.objects.filter(employee=self.request.user.employee)
+            queryset = Ticket.objects.filter(
+                employee=self.request.user.employee)
         else:
-             queryset = Ticket.objects.all()
+            queryset = Ticket.objects.all()
         return queryset
 
     def create(self, request, *args, **kwargs):
@@ -56,12 +61,14 @@ class TicketAPI(ModelViewSet):
         id_employee = request.data["employee"]
         id_technical = request.data["was_attended"]
         employee = Employee.objects.filter(id=id_employee).last()
-        ticket = Ticket.objects.filter(employee=employee).order_by('date').last()
+        ticket = Ticket.objects.filter(
+            employee=employee).order_by('date').last()
         technical = Technical.objects.filter(id=id_technical).last()
         send_mail(
             "Nueva ticket registrado",
             "Usted ha registrado un ticket con éxito. El número de su ticket es: " +
-            str(ticket.number)+"Le atenderemos en la brevedad posible. Ingrese a http://localhost:8000",
+            str(ticket.number) +
+            "Le atenderemos en la brevedad posible. Ingrese a http://localhost:8000",
             settings.EMAIL_HOST_USER,
             [employee.user.email],
             fail_silently=False,
@@ -82,7 +89,7 @@ class TicketAPI(ModelViewSet):
         if request.accepted_renderer.format == 'html':
             if 'name' not in request.GET:
                 return Response({'ticket': response.data},
-                            template_name = 'Ticket/edit-ticket.html')
+                                template_name='Ticket/edit-ticket.html')
             else:
                 return redirect('Ticket:ticket-list')
         return response
