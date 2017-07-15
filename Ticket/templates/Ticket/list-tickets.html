@@ -68,7 +68,7 @@
                       <td style="width:10%">{{ticket.date}}</td>
                       <td style="width:10%">{{ticket.status_time.date_end}}</td>
                       <td style="width:10%" id="{{ticket.status_time.time}}" class="timer" data-status-time="{{ticket.status_time.status_time}}"
-                        data-date-end="{{ticket.status_time.date_end}}"></td>
+                        data-date-end="{{ticket.status_time.date_end}}" data-date="{{ticket.status_time.date}}" data-ticket-status="{{ticket.status}}"></td>
                       {% if ticket.status == 1 %}
                       <td>
                         <button type="button" class="btn btn-success btn-lg ticket-status" data-id-ticket="{{ticket.id}}" style="width: 100%; display: inline-block"
@@ -191,16 +191,17 @@
                   <div class="tab-content">
                     <div class="tab-pane active" id="horizontal-form">
                       <div class="radio">
-                        <label><input class="radio-opt" type="radio" name="optradio" value="2">Atender</label>
+                        <label><input class="radio-opt" type="radio" name="optradio" value="2" onclick="giveSolution(2)">Atender</label>
                       </div>
                       <div class="radio">
-                        <label><input class="radio-opt" type="radio" name="optradio" value="1">Dar Solución</label>
+                        <label><input id="give-solution" class="radio-opt" type="radio" name="optradio" value="1" onclick="giveSolution(1)">Dar Solución</label>
                       </div>
                       <div class="radio">
-                        <label><input class="radio-opt" type="radio" name="optradio" value="0">Reabrir</label>
+                        <label><input class="radio-opt" type="radio" name="optradio" value="0" onclick="giveSolution(0)">Reabrir</label>
                       </div>
                     </div>
                   </div>
+                  <div id="solution"></div>
                 </div>
                 <div class="modal-footer">
                   <button id="update-status" type="button" class="btn btn-primary">Aceptar</button>
@@ -264,60 +265,77 @@
     $('#myModal2').modal('hide')
     location.href = "{% url 'Ticket:ticket-list' %}";
   });
-  function getTime() {
 
+  function getTime() {
     var i = 0;
     var myVar = setInterval(function () {
       $(".timer").each(function () {
         var id_time = $(this).attr("id");
-        // var timeTmp = Number(time);
-        // var hours = parseInt(timeTmp / 3600);
-        // var minutes = parseInt((timeTmp % 3600) / 60);
-        // var seconds = parseInt(timeTmp % 60) + i;
-        // timeTmp = hours.toString() + ":" + minutes.toString() + ":" + seconds.toString();
-        // document.getElementById(time).innerHTML = timeTmp;
         var dateEnd = $(this).data("date-end");
+        var statusTime = $(this).data("status-time");
+        var ticketStatus = $(this).data("ticket-status");
         var date = dateEnd.split(" ")[0]
         var dateDay = date.split("-")[0]
-        var dateMonth = date.split("-")[1]
+        var dateMonth = (Number(date.split("-")[1]) - 1).toString()
         var dateYear = date.split("-")[2]
         var time = dateEnd.split(" ")[1]
         var timeHour = time.split(":")[0]
         var timeMinute = time.split(":")[1]
-
         var fecha = new Date(dateYear, dateMonth, dateDay, timeHour, timeMinute, '00')
-        var hoy = new Date()
+        var dateEnd = $(this).data("date");
+        var date = dateEnd.split(" ")[0]
+        var dateDay = date.split("-")[0]
+        var dateMonth = (Number(date.split("-")[1]) - 1).toString()
+        var dateYear = date.split("-")[2]
+        var time = dateEnd.split(" ")[1]
+        var timeHour = time.split(":")[0]
+        var timeMinute = time.split(":")[1]
+        var timeSecond = (Number(time.split(":")[2]) + i).toString()
+        var hoy = new Date(dateYear, dateMonth, dateDay, timeHour, timeMinute, timeSecond)
         var dias = 0
         var horas = 0
         var minutos = 0
         var segundos = 0
+        if (ticketStatus != "1") {
+          if (fecha > hoy && statusTime == "timeleft") {
+            var diferencia = (fecha.getTime() - hoy.getTime()) / 1000
+            dias = Math.floor(diferencia / 86400)
+            diferencia = diferencia - (86400 * dias)
+            horas = Math.floor(diferencia / 3600)
+            diferencia = diferencia - (3600 * horas)
+            minutos = Math.floor(diferencia / 60)
+            diferencia = diferencia - (60 * minutos)
+            segundos = Math.floor(diferencia)
+            document.getElementById(id_time).innerHTML = 'Quedan ' + dias + ' D&iacute;as, ' + horas + ' Horas, ' + minutos + ' Minutos, ' + segundos + ' Segundos'
+            i = i + 1;
+          }
+          else {
+            var hoy = new Date()
+            var diferencia = (hoy.getTime() - fecha.getTime()) / 1000
+            dias = Math.floor(diferencia / 86400)
+            diferencia = diferencia - (86400 * dias)
+            horas = Math.floor(diferencia / 3600)
+            diferencia = diferencia - (3600 * horas)
+            minutos = Math.floor(diferencia / 60)
+            diferencia = diferencia - (60 * minutos)
+            segundos = Math.floor(diferencia)
 
-        if (fecha > hoy) {
-          var diferencia = (fecha.getTime() - hoy.getTime()) / 1000
-          dias = Math.floor(diferencia / 86400)
-          diferencia = diferencia - (86400 * dias)
-          horas = Math.floor(diferencia / 3600)
-          diferencia = diferencia - (3600 * horas)
-          minutos = Math.floor(diferencia / 60)
-          diferencia = diferencia - (60 * minutos)
-          segundos = Math.floor(diferencia)
-
-          document.getElementById(id_time).innerHTML = 'Quedan ' + dias + ' D&iacute;as, ' + horas + ' Horas, ' + minutos + ' Minutos, ' + segundos + ' Segundos'
-
-          if (dias > 0 || horas > 0 || minutos > 0 || segundos > 0) {
-            setTimeout("calcula(\"" + id + "\")", 1000)
+            document.getElementById(id_time).innerHTML = 'Pasaron ' + dias + ' D&iacute;as, ' + horas + ' Horas, ' + minutos + ' Minutos, ' + segundos + ' Segundos'
+            i = i - 1;
           }
         }
-        else {
-          document.getElementById(id_time).innerHTML = 'Quedan ' + dias + ' D&iacute;as, ' + horas + ' Horas, ' + minutos + ' Minutos, ' + segundos + ' Segundos'
-        }
       });
-      i = i + 1;
     }, 1000);
   }
   getTime();
-  function calcula(id) {
 
+  function giveSolution(valRadio) {
+    if (valRadio == 1) {
+      $("#solution").html('<br><br><label for="txtarea1" class="col-sm-2 control-label">Solución</label><br><div class="col-sm-12"><textarea name="solution" id="txtarea1" cols="50" rows="5" class="form-control"></textarea></div><br><br>');
+    }
+    else {
+      $("#solution").html("")
+    }
   }
 
 </script>

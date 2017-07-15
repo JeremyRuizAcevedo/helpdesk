@@ -15,7 +15,6 @@ from Enterprise.serializers import TechnicalSerializer
 from Service.models import Category
 from Service.serializers import CategorySerializer
 from django.core.mail import send_mail
-from django.core.mail import EmailMessage
 from django.conf import settings
 
 # Create your views here.

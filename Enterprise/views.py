@@ -11,12 +11,13 @@ from rest_framework.authentication import SessionAuthentication,\
     BasicAuthentication
 from rest_framework.viewsets import ModelViewSet
 from Enterprise.serializers import EmployeeSerializer, TechnicalSerializer,\
-    AreaSerializer
+    AreaSerializer, UserSerializer
 from Enterprise.models import Employee, Technical, Area
 from rest_framework.urls import template_name
 from django.http.response import JsonResponse
 from Ticket.models import Ticket
 from django.db.models.aggregates import Count
+from django.contrib.auth.models import User
 # Create your views here.
 
 class Login(APIView):
@@ -155,19 +156,27 @@ class TechnicalAPI(ModelViewSet):
     lookup_field = 'id'
     
     def get_queryset(self):
-        print(self.request.query_params)
         if 'free_technical' in self.request.query_params:
             busy_technicals = list(Ticket.objects.\
                                    values_list("was_attended", flat=True).distinct())
-            print(busy_technicals)
             id_service = self.request.query_params["service"]
             free_technical = Technical.objects.\
                                 filter(employee__n_status=True, services__id=id_service).\
                                 exclude(id__in=busy_technicals)
-            print(free_technical)
             queryset = free_technical
         else:
             queryset = Technical.objects.filter(employee__n_status=True)
         return queryset
-            
 
+
+def autocomplete(request):
+    if request.is_ajax():
+        queryset = Employee.objects.filter(user__username__startswith=request.GET.get('search', None))
+        list = []        
+        for i in queryset:
+            list.append(i.user.username)
+        data = {
+            'list': list,
+        }
+        return JsonResponse(data)
+    return render(request, "Enterprise/autocomplete.html", {})

@@ -7,7 +7,8 @@ from Enterprise.serializers import EmployeeSerializer, TechnicalSerializer
 from rest_framework.settings import api_settings
 from datetime import datetime, timedelta
 from django.utils import timezone
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 class ServiceTypeSerializer(ModelSerializer):
 
@@ -42,7 +43,9 @@ class TicketSerializer(ModelSerializer):
 
     def get_status_time(self, obj):
         date_end = obj.date + timedelta(seconds=obj.service.ans * 60)
+        date_format = datetime.strftime(obj.date, "%d-%m-%Y %H:%M:%S")
         date_end_format = datetime.strftime(date_end, "%d-%m-%Y %H:%M")
+
         if date_end > timezone.now():
             status_time = "timeleft"
             time = date_end - timezone.now()
@@ -56,8 +59,19 @@ class TicketSerializer(ModelSerializer):
             if obj.status != 1 and obj.status != 2:
                 obj.status = 4
                 obj.save()
+                send_mail(
+                    "Tiempo de ticket excedido",
+                    "El técnico "+ obj.was_attended.employee.user.get_full_name() +
+                    "Ha incumplido con dar solucion al ticket número " +
+                    str(obj.number) +
+                    "Pongase en contacto con el tecnico para dar solucion a esta" +
+                    "situacion. Ingrese a http://localhost:8000",
+                    settings.EMAIL_HOST_USER,
+                    [obj.was_attended.boss.employee.user.email],
+                    fail_silently=False,
+                )
         return {"time": time.total_seconds(), "date_end": date_end_format,
-                "status_time": status_time}
+                "status_time": status_time, "date": date_format}
 #     def to_representation(self, obj):
 #         """Move fields from profile to user representation."""
 #         rep = super().to_representation(obj)

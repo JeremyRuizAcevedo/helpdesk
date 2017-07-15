@@ -15,7 +15,7 @@ urlpatterns = [
             {'get': 'retrieve', 'put': 'update', 'patch': 'partial_update'}
             ),
         name='employee-detail'),
-    url(r'^technicals/$',
+    url(r'^technicals/$',   
         views.TechnicalAPI.as_view({'get': 'list', 'post': 'create'}), name='technical-list'),
     url(r'^technicals/(?P<id>[0-9]+)/$',
         views.TechnicalAPI.as_view({'get': 'retrieve', 'put': 'update'}), name='technical-detail'),
@@ -26,4 +26,5 @@ urlpatterns = [
             {'get': 'retrieve', 'put': 'update', 'patch': 'partial_update'}
             ),
         name='area-detail'),
+    url(r'^autocomplete/$', views.autocomplete, name='autocomplete'),
 ]
